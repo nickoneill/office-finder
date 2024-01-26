@@ -78,7 +78,7 @@ func findAddresses(contentURL string) (string, error) {
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,
-					Content: `you are an assistant designed to extract addresses from text content, returning them in a json format which includes the fields: address, city, state, zip, phone`,
+					Content: `you are an assistant designed to extract addresses from text content, returning them in a yaml format which includes the fields: address, city, state, zip, phone. If a fax number is listed, also include it in a fax field. If the address includes a suite number or room, also include it in a suite field. if the address includes a building, also include it in a building field.`,
 				},
 				{
 					Role:    openai.ChatMessageRoleUser,
