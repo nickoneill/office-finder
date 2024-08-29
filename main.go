@@ -14,8 +14,9 @@ import (
 )
 
 type OfficeList struct {
-	URL     string       `json:"url"`
-	Offices []OfficeInfo `json:"offices"`
+	Bioguide string       `json:"bioguide"`
+	URL      string       `json:"url"`
+	Offices  []OfficeInfo `json:"offices"`
 }
 
 type OfficeInfo struct {

@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/sashabaranov/go-openai"
 	"github.com/sashabaranov/go-openai/jsonschema"
@@ -29,10 +31,14 @@ func scrapeAllURLs() error {
 	}
 	openaiClient = openai.NewClient(openaiToken)
 
-	urls := listRepURLs()
-	log.Printf("got %d urls", len(urls))
+	bioguideToURLs := listRepURLs()
+	log.Printf("got %d urls", len(bioguideToURLs))
 
-	results := processURLs(urls)
+	results := processURLs(bioguideToURLs)
+	// sort results by bioguide for consistent diffs
+	sort.Slice(results, func(i, j int) bool {
+		return strings.ToLower(results[i].Bioguide) < strings.ToLower(results[j].Bioguide)
+	})
 
 	file, err := os.Create("offices.json")
 	if err != nil {
@@ -49,16 +55,18 @@ func scrapeAllURLs() error {
 	return nil
 }
 
-func processURLs(urls []string) []OfficeList {
+func processURLs(urls map[string]string) []OfficeList {
 	var results []OfficeList
 
-	for _, url := range urls {
+	// this could certainly be faster done in parallel but in an effort to not run afoul of
+	// openai rate limits we'll do it serially to start
+	for bioguide, url := range urls {
 		offices, err := findAddresses(url)
 		if err != nil {
 			log.Printf("Error processing %s: %v", url, err)
 			continue
 		}
-		results = append(results, OfficeList{URL: url, Offices: offices})
+		results = append(results, OfficeList{Bioguide: bioguide, URL: url, Offices: offices})
 	}
 
 	return results

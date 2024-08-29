@@ -10,6 +10,9 @@ import (
 )
 
 type Legislator struct {
+	ID struct {
+		Bioguide string `yaml:"bioguide"`
+	} `yaml:"id"`
 	Terms []struct {
 		Type         string `yaml:"type"`
 		Start        string `yaml:"start"`
@@ -21,10 +24,11 @@ type Legislator struct {
 	} `yaml:"terms"`
 }
 
-func listRepURLs() []string {
+// listRepURLs returns a map of bioguide IDs to website urls
+func listRepURLs() map[string]string {
 	url := "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-current.yaml"
 
-	websiteURLs := []string{}
+	websiteURLs := map[string]string{}
 
 	// Download the YAML file
 	resp, err := http.Get(url)
@@ -63,7 +67,7 @@ func listRepURLs() []string {
 				continue
 			}
 			if latestTerm.Type == "rep" || latestTerm.Type == "sen" {
-				websiteURLs = append(websiteURLs, latestTerm.URL)
+				websiteURLs[legislator.ID.Bioguide] = latestTerm.URL
 			}
 		}
 	}
