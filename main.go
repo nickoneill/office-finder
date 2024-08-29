@@ -13,6 +13,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/sashabaranov/go-openai"
 	"github.com/sashabaranov/go-openai/jsonschema"
+	"github.com/urfave/cli/v2"
 	"jaytaylor.com/html2text"
 )
 
@@ -42,9 +43,28 @@ type OfficeInfo struct {
 var openaiClient *openai.Client
 
 func main() {
+	app := &cli.App{
+		Name:  "office-finder",
+		Usage: "A tool to scrape and process representative office addresses and phone numbers",
+		Commands: []*cli.Command{
+			{
+				Name:   "scrape",
+				Usage:  "Scrape office addresses from public representative websites",
+				Action: scrapeCommand,
+			},
+		},
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func scrapeCommand(c *cli.Context) error {
 	openaiToken := os.Getenv("OPENAI_API_KEY")
 	if openaiToken == "" {
-		log.Fatal("No OpenAI token found")
+		return fmt.Errorf("No OpenAI token found")
 	}
 	openaiClient = openai.NewClient(openaiToken)
 
@@ -55,24 +75,23 @@ func main() {
 
 	file, err := os.Create("offices.json")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer file.Close()
 
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(results)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
 
 func processURLs(urls []string) []OfficeList {
 	var results []OfficeList
-	// rateLimiter := time.NewTicker(2 * time.Second)
-	// defer rateLimiter.Stop()
 
 	for _, url := range urls {
-		// <-rateLimiter.C // Wait for the rate limiter before processing
 		offices, err := findAddresses(url)
 		if err != nil {
 			log.Printf("Error processing %s: %v", url, err)
@@ -121,7 +140,6 @@ func findAddresses(contentURL string) ([]OfficeInfo, error) {
 	if err != nil {
 		return offices, fmt.Errorf("can't parse html to string: %s", err)
 	}
-	// log.Println(htmlText)
 
 	addressResponse, err := getOpenAIResponse(ADDRESS_PROMPT, htmlText, true)
 	if err != nil {
@@ -151,8 +169,6 @@ func findAddresses(contentURL string) ([]OfficeInfo, error) {
 		if err != nil {
 			return offices, fmt.Errorf("can't parse html to string: %s", err)
 		}
-
-		// log.Println(htmlText)
 
 		addressResponse, err := getOpenAIResponse(ADDRESS_PROMPT, htmlText, true)
 		if err != nil {
