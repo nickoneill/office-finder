@@ -19,5 +19,6 @@ require (
 	github.com/urfave/cli/v2 v2.27.4
 	golang.org/x/net v0.17.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 	jaytaylor.com/html2text v0.0.0-20230321000545-74c2419ad056
 )

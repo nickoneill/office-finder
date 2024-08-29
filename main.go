@@ -49,6 +49,13 @@ func main() {
 					return validateLegislators()
 				},
 			},
+			{
+				Name:  "upstreamChanges",
+				Usage: "Update the YAML file with office information from offices.json",
+				Action: func(ctx *cli.Context) error {
+					return upstreamChanges()
+				},
+			},
 		},
 	}
 
