@@ -3,9 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -89,23 +87,4 @@ func validateLegislators() error {
 	}
 
 	return nil
-}
-
-func fetchYAMLData() ([]byte, error) {
-	url := "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-current.yaml"
-
-	// Download the YAML file
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("error downloading file: %v", err)
-	}
-	defer resp.Body.Close()
-
-	// Read the response body
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %v", err)
-	}
-
-	return body, nil
 }
