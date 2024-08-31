@@ -31,10 +31,16 @@ func scrapeAllURLs() error {
 	log.Printf("got %d urls to scrape", len(bioguideToURLs))
 
 	results := processURLs(bioguideToURLs)
-	// sort results by bioguide for consistent diffs
+	// sort legislators by bioguide for consistent diffs
 	sort.Slice(results, func(i, j int) bool {
 		return strings.ToLower(results[i].Bioguide) < strings.ToLower(results[j].Bioguide)
 	})
+	// sort offices by zip code (???)
+	for _, leg := range results {
+		sort.Slice(leg.Offices, func(i, j int) bool {
+			return strings.ToLower(leg.Offices[i].Zip) < strings.ToLower(leg.Offices[j].Zip)
+		})
+	}
 
 	file, err := os.Create("offices.json")
 	if err != nil {
