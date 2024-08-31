@@ -11,6 +11,8 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/sashabaranov/go-openai"
 	"github.com/sashabaranov/go-openai/jsonschema"
@@ -58,18 +60,35 @@ func scrapeAllURLs() error {
 
 func processURLs(urls map[string]string) []OfficeList {
 	var results []OfficeList
+	var mutex sync.Mutex
+	var wg sync.WaitGroup
 
-	// this could certainly be faster done in parallel but in an effort to not run afoul of
-	// openai rate limits we'll do it serially to start
+	// process urls no more than 5 at a time, started 1s apart at least
+	// in an attempt to not make rate limiting gods angry
+	semaphore := make(chan struct{}, 5)
+	rateLimiter := time.Tick(time.Second)
+
 	for bioguide, url := range urls {
-		offices, err := findAddresses(url)
-		if err != nil {
-			log.Printf("Error processing %s: %v", url, err)
-			continue
-		}
-		results = append(results, OfficeList{Bioguide: bioguide, URL: url, Offices: offices})
+		wg.Add(1)
+		go func(bg string, u string) {
+			defer wg.Done()
+			semaphore <- struct{}{}
+			<-rateLimiter
+			defer func() { <-semaphore }()
+
+			offices, err := findAddresses(u)
+			if err != nil {
+				log.Printf("Error processing %s: %v", u, err)
+				return
+			}
+
+			mutex.Lock()
+			results = append(results, OfficeList{Bioguide: bg, URL: u, Offices: offices})
+			mutex.Unlock()
+		}(bioguide, url)
 	}
 
+	wg.Wait()
 	return results
 }
 
@@ -115,7 +134,7 @@ func findAddresses(contentURL string) ([]OfficeInfo, error) {
 	if err != nil {
 		return offices, err
 	}
-	log.Printf("address response: %s", addressResponse)
+
 	offices, err = marshalOffliceList(addressResponse)
 	if err != nil {
 		return offices, err
@@ -144,7 +163,6 @@ func findAddresses(contentURL string) ([]OfficeInfo, error) {
 		if err != nil {
 			return offices, err
 		}
-		log.Printf("address response: %s", addressResponse)
 
 		offices, err := marshalOffliceList(addressResponse)
 
