@@ -20,8 +20,8 @@ import (
 const ADDRESS_PROMPT = `please find all office addresses within this content, returning them in json formatting as plain text without any backticks or formatting indicators. Include the fields: address, city, state, zip, phone.
 Format all phone numbers as 123-456-7890
 If a fax number is listed, also include it in a fax field.
-If the address includes a suite number or room, also include it in a suite field.
-if the address includes a building, also include it in a building field.`
+If the address includes a suite number or room,  include it in a suite field. Do not include it in the address field.
+if the address includes a building,  include it in a building field. Do not include it in the address field.`
 
 const LOCATIONS_PROMPT = `please return only the most likely url on this page that would list office locations without any other text`
 

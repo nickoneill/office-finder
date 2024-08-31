@@ -24,8 +24,8 @@ type OfficeInfo struct {
 	City     string `json:"city"`
 	State    string `json:"state"`
 	Zip      string `json:"zip"`
-	Phone    string `json:"phone"`
-	Fax      string `json:"fax"`
+	Phone    string `json:"phone,omitempty"`
+	Fax      string `json:"fax,omitempty"`
 }
 
 var openaiClient *openai.Client
