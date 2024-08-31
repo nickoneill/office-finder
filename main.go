@@ -31,6 +31,12 @@ type OfficeInfo struct {
 var openaiClient *openai.Client
 
 func main() {
+	openaiToken := os.Getenv("OPENAI_API_KEY")
+	if openaiToken == "" {
+		log.Fatal("no OpenAI token found")
+	}
+	openaiClient = openai.NewClient(openaiToken)
+
 	app := &cli.App{
 		Name:  "office-finder",
 		Usage: "A tool to scrape and process representative office addresses and phone numbers",
@@ -38,8 +44,18 @@ func main() {
 			{
 				Name:  "scrape",
 				Usage: "Scrape office addresses from public representative websites",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "url",
+						Usage: "URL to scrape (optional, if not provided all URLs will be scraped)",
+					},
+				},
 				Action: func(ctx *cli.Context) error {
-					return scrapeAllURLs()
+					url := ctx.String("url")
+					if url == "" {
+						return scrapeAllURLs()
+					}
+					return scrapeOne(url)
 				},
 			},
 			{

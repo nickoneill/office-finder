@@ -20,22 +20,15 @@ import (
 )
 
 const ADDRESS_PROMPT = `please find all office addresses within this content, returning them in json formatting as plain text without any backticks or formatting indicators. Include the fields: address, city, state, zip, phone.
-Format all phone numbers as 123-456-7890
 If a fax number is listed, also include it in a fax field.
-If the address includes a suite number or room,  include it in a suite field. Do not include it in the address field.
-if the address includes a building,  include it in a building field. Do not include it in the address field.`
+If the address includes a suite number or room, include it in a suite field. Do not include it in the address field. If there is no suite, omit the suite field.
+if the address includes a building, include it in a building field. Do not include it in the address field. If there is no building, omit the building field.`
 
 const LOCATIONS_PROMPT = `please return only the most likely url on this page that would list office locations without any other text`
 
 func scrapeAllURLs() error {
-	openaiToken := os.Getenv("OPENAI_API_KEY")
-	if openaiToken == "" {
-		return fmt.Errorf("no OpenAI token found")
-	}
-	openaiClient = openai.NewClient(openaiToken)
-
 	bioguideToURLs := listRepURLs()
-	log.Printf("got %d urls", len(bioguideToURLs))
+	log.Printf("got %d urls to scrape", len(bioguideToURLs))
 
 	results := processURLs(bioguideToURLs)
 	// sort results by bioguide for consistent diffs
@@ -90,6 +83,48 @@ func processURLs(urls map[string]string) []OfficeList {
 
 	wg.Wait()
 	return results
+}
+
+func scrapeOne(url string) error {
+	addresses, err := findAddresses(url)
+	if err != nil {
+		return fmt.Errorf("error finding addresses for %s: %v", url, err)
+	}
+
+	officesData, err := os.ReadFile("offices.json")
+	if err != nil {
+		return fmt.Errorf("error reading offices.json: %v", err)
+	}
+
+	var officeList []OfficeList
+	err = json.Unmarshal(officesData, &officeList)
+	if err != nil {
+		return fmt.Errorf("error parsing offices.json: %v", err)
+	}
+
+	updated := false
+	for i, office := range officeList {
+		if office.URL == url {
+			officeList[i].Offices = addresses
+			updated = true
+			break
+		}
+	}
+	if !updated {
+		return fmt.Errorf("couldn't find that url to update in the office list")
+	}
+
+	updatedData, err := json.MarshalIndent(officeList, "", "  ")
+	if err != nil {
+		return fmt.Errorf("error marshaling updated office list: %v", err)
+	}
+
+	err = os.WriteFile("offices.json", updatedData, 0644)
+	if err != nil {
+		return fmt.Errorf("error writing updated offices.json: %v", err)
+	}
+
+	return nil
 }
 
 func getPageSource(contentURL string) (string, error) {
