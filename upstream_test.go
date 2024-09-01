@@ -159,3 +159,23 @@ func TestOfficeEquals(t *testing.T) {
 		})
 	}
 }
+
+func TestFormatPhone(t *testing.T) {
+	testCases := []struct {
+		input    string
+		expected string
+	}{
+		{"(123) 456-7890", "123-456-7890"},
+		{"123-456-7890", "123-456-7890"},
+		{"1234567890", "123-456-7890"},
+		{"123-456-789", "123-456-789"},   // Less than 10 digits, should remain unchanged
+		{"+11234567891", "123-456-7891"}, // More than 10 digits, should remain unchanged
+	}
+
+	for _, tc := range testCases {
+		result := formatPhone(tc.input)
+		if result != tc.expected {
+			t.Errorf("formatPhone(%q) = %q, expected %q", tc.input, result, tc.expected)
+		}
+	}
+}

@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 )
 
 // sometimes suite numbers contain dots, or letters
@@ -19,22 +19,24 @@ var SuiteNumbersRegex = regexp.MustCompile(`^[a-z0-9\.]+$`)
 type YAMLLegislatorOffices struct {
 	ID struct {
 		Bioguide string `yaml:"bioguide"`
-		Govtrack string `yaml:"govtrack"`
+		Govtrack int    `yaml:"govtrack"`
 		Thomas   string `yaml:"thomas"`
 	} `yaml:"id"`
 	Offices []YAMLOffice `yaml:"offices"`
 }
 
 type YAMLOffice struct {
-	ID       string `yaml:"id"`
-	Address  string `yaml:"address"`
-	Building string `yaml:"building"`
-	City     string `yaml:"city"`
-	Fax      string `yaml:"fax"`
-	Phone    string `yaml:"phone"`
-	State    string `yaml:"state"`
-	Suite    string `yaml:"suite"`
-	Zip      string `yaml:"zip"`
+	ID        string  `yaml:"id"`
+	Address   string  `yaml:"address"`
+	Suite     string  `yaml:"suite,omitempty"`
+	Building  string  `yaml:"building,omitempty"`
+	City      string  `yaml:"city"`
+	State     string  `yaml:"state"`
+	Zip       string  `yaml:"zip"`
+	Latitude  float64 `yaml:"latitude,omitempty"`
+	Longitude float64 `yaml:"longitude,omitempty"`
+	Phone     string  `yaml:"phone"`
+	Fax       string  `yaml:"fax,omitempty"`
 }
 
 func upstreamChanges() error {
@@ -113,17 +115,20 @@ func upstreamChanges() error {
 
 	log.Printf("found %d new offices, removed %d old offices", statsNewOffices, statsRemovedOffices)
 
-	// updatedYAML, err := yaml.Marshal(legislators)
-	// if err != nil {
-	// 	return fmt.Errorf("error marshaling updated YAML data: %v", err)
-	// }
+	updatedYAML, err := yaml.Marshal(legislators)
+	if err != nil {
+		return fmt.Errorf("error marshaling updated YAML data: %v", err)
+	}
 
-	// err = os.WriteFile("updated_legislators-district-offices.yaml", updatedYAML, 0644)
-	// if err != nil {
-	// 	return fmt.Errorf("error writing updated YAML file: %v", err)
-	// }
+	// we want single quoted strings for zips and numeric IDs so replace them all here
+	singleQuotedUpdatedYAML := strings.ReplaceAll(string(updatedYAML), `"`, `'`)
 
-	// fmt.Println("Updated YAML file has been created: updated_legislators-district-offices.yaml")
+	err = os.WriteFile("updated_legislators-district-offices.yaml", []byte(singleQuotedUpdatedYAML), 0644)
+	if err != nil {
+		return fmt.Errorf("error writing updated YAML file: %v", err)
+	}
+
+	fmt.Println("Updated YAML file has been created: updated_legislators-district-offices.yaml")
 	return nil
 }
 
@@ -159,9 +164,9 @@ func officeFromGenOffice(genOffice OfficeInfo, bioguide string, existingOffices 
 		Suite:    formatSuite(genOffice.Suite),
 		Building: genOffice.Building,
 		Zip:      genOffice.Zip,
-		State:    genOffice.State,
-		Phone:    genOffice.Phone,
-		Fax:      genOffice.Fax,
+		State:    formatState(genOffice.State),
+		Phone:    formatPhone(genOffice.Phone),
+		Fax:      formatPhone(genOffice.Fax),
 	}
 }
 
@@ -177,4 +182,26 @@ func formatSuite(suite string) string {
 	}
 
 	return suite
+}
+
+func formatState(state string) string {
+	return strings.ToUpper(strings.ReplaceAll(state, `.`, ``))
+}
+
+func formatPhone(phone string) string {
+	// remove all non-digit characters
+	digits := regexp.MustCompile(`\D`).ReplaceAllString(phone, "")
+
+	// special case the +1 form
+	if len(digits) == 11 {
+		return fmt.Sprintf("%s-%s-%s", digits[1:4], digits[4:7], digits[7:])
+	}
+
+	// if we don't have exactly 10 digits, return the original string
+	if len(digits) != 10 {
+		return phone
+	}
+
+	// format the phone number as xxx-xxx-xxxx
+	return fmt.Sprintf("%s-%s-%s", digits[:3], digits[3:6], digits[6:])
 }
