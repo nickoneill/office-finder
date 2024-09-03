@@ -531,7 +531,6 @@
       {
         "address": "503 Hart Senate",
         "suite": "N/A",
-        "building": "Office Bldg.",
         "city": "Washington",
         "state": "DC",
         "zip": "20510",
@@ -541,7 +540,6 @@
       {
         "address": "200 North High St.",
         "suite": "Room 618",
-        "building": "N/A",
         "city": "Columbus",
         "state": "OH",
         "zip": "43215",
@@ -551,7 +549,6 @@
       {
         "address": "200 West Erie Ave.",
         "suite": "312",
-        "building": "N/A",
         "city": "Lorain",
         "state": "OH",
         "zip": "44052",
@@ -561,7 +558,6 @@
       {
         "address": "801 West Superior Ave.",
         "suite": "1400",
-        "building": "N/A",
         "city": "Cleveland",
         "state": "OH",
         "zip": "44113",
@@ -571,7 +567,6 @@
       {
         "address": "550 Main Street",
         "suite": "10-273",
-        "building": "N/A",
         "city": "Cincinnati",
         "state": "OH",
         "zip": "45202",
@@ -15660,34 +15655,7 @@
     "url": "https://www.schumer.senate.gov",
     "offices": [
       {
-        "address": "Suite 2301",
-        "suite": "Suite 2301",
-        "city": "New York City",
-        "state": "NY",
-        "zip": "10017",
-        "phone": "(212) 486-4430",
-        "fax": "(202) 228-2838"
-      },
-      {
-        "address": "Suite 100",
-        "suite": "Suite 100",
-        "city": "Peekskill",
-        "state": "NY",
-        "zip": "10566",
-        "phone": "(914) 734-1532",
-        "fax": "(914) 734-1673"
-      },
-      {
-        "address": "#300N",
-        "suite": "#300N",
-        "city": "Melville",
-        "state": "NY",
-        "zip": "11747",
-        "phone": "(631) 753-0978",
-        "fax": "(631) 391-9068"
-      },
-      {
-        "address": "Room 827",
+        "address": "Leo O'Brien Building",
         "suite": "Room 827",
         "building": "Leo O'Brien Building",
         "city": "Albany",
@@ -15697,16 +15665,7 @@
         "fax": "(518) 431-4076"
       },
       {
-        "address": "Room 841",
-        "suite": "Room 841",
-        "city": "Syracuse",
-        "state": "NY",
-        "zip": "13261",
-        "phone": "(315) 423-5471",
-        "fax": "(315) 423-5185"
-      },
-      {
-        "address": "Room. 100 A-F",
+        "address": "15 Henry Street",
         "suite": "Room. 100 A-F",
         "city": "Binghamton",
         "state": "NY",
@@ -15715,7 +15674,7 @@
         "fax": "(607) 772-8124"
       },
       {
-        "address": "#660",
+        "address": "130 South Elmwood Avenue",
         "suite": "#660",
         "city": "Buffalo",
         "state": "NY",
@@ -15724,7 +15683,34 @@
         "fax": "(716) 846-4113"
       },
       {
-        "address": "Room 3040",
+        "address": "145 Pinelawn Road",
+        "suite": "#300N",
+        "city": "Melville",
+        "state": "NY",
+        "zip": "11747",
+        "phone": "(631) 753-0978",
+        "fax": "(631) 391-9068"
+      },
+      {
+        "address": "780 Third Avenue",
+        "suite": "Suite 2301",
+        "city": "New York City",
+        "state": "NY",
+        "zip": "10017",
+        "phone": "(212) 486-4430",
+        "fax": "(202) 228-2838"
+      },
+      {
+        "address": "One Park Place",
+        "suite": "Suite 100",
+        "city": "Peekskill",
+        "state": "NY",
+        "zip": "10566",
+        "phone": "(914) 734-1532",
+        "fax": "(914) 734-1673"
+      },
+      {
+        "address": "100 State Street",
         "suite": "Room 3040",
         "city": "Rochester",
         "state": "NY",
@@ -15733,7 +15719,17 @@
         "fax": "(585) 263-3173"
       },
       {
+        "address": "100 South Clinton Street",
+        "suite": "Room 841",
+        "city": "Syracuse",
+        "state": "NY",
+        "zip": "13261",
+        "phone": "(315) 423-5471",
+        "fax": "(315) 423-5185"
+      },
+      {
         "address": "322 Hart Senate Office Building",
+        "building": "Hart Senate Office Building",
         "city": "Washington D.C.",
         "state": "DC",
         "zip": "20510",

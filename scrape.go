@@ -21,8 +21,8 @@ import (
 
 const ADDRESS_PROMPT = `please find all office addresses within this content, returning them in json formatting as plain text without any backticks or formatting indicators. Include the fields: address, city, state, zip, phone.
 If a fax number is listed, also include it in a fax field.
-If the address includes a suite number or room, include it in a suite field. Do not include it in the address field. If there is no suite, omit the suite field.
-if the address includes a building, include it in a building field. Do not include it in the address field. If there is no building, omit the building field.`
+If the address includes a suite or room number, include it in a suite field. Do not include the suite or room information in the address field. If there is no suite or room, omit the suite field.
+if the address includes a building, include it in a building field. Do not include the building information in the address field. If there is no building, omit the building field.`
 
 const LOCATIONS_PROMPT = `please return only the most likely url on this page that would list office locations without any other text`
 
@@ -75,7 +75,7 @@ func processURLs(urls map[string]string) []OfficeList {
 			<-rateLimiter
 			defer func() { <-semaphore }()
 
-			offices, err := findAddresses(u)
+			offices, err := findAddresses(u, false)
 			if err != nil {
 				log.Printf("Error processing %s: %v", u, err)
 				return
@@ -91,10 +91,13 @@ func processURLs(urls map[string]string) []OfficeList {
 	return results
 }
 
-func scrapeOne(url string) error {
-	addresses, err := findAddresses(url)
+func scrapeOne(url string, debug bool) error {
+	addresses, err := findAddresses(url, debug)
 	if err != nil {
 		return fmt.Errorf("error finding addresses for %s: %v", url, err)
+	}
+	if debug {
+		log.Printf("found addresses: %+v", addresses)
 	}
 
 	officesData, err := os.ReadFile("offices.json")
@@ -108,10 +111,12 @@ func scrapeOne(url string) error {
 		return fmt.Errorf("error parsing offices.json: %v", err)
 	}
 
+	bioguide := ""
 	updated := false
 	for i, office := range officeList {
 		if office.URL == url {
 			officeList[i].Offices = addresses
+			bioguide = office.Bioguide
 			updated = true
 			break
 		}
@@ -129,6 +134,8 @@ func scrapeOne(url string) error {
 	if err != nil {
 		return fmt.Errorf("error writing updated offices.json: %v", err)
 	}
+
+	log.Printf("updated %s", bioguide)
 
 	return nil
 }
@@ -157,7 +164,7 @@ func getPageSource(contentURL string) (string, error) {
 	return string(html), nil
 }
 
-func findAddresses(contentURL string) ([]OfficeInfo, error) {
+func findAddresses(contentURL string, debug bool) ([]OfficeInfo, error) {
 	log.Printf("finding for %s", contentURL)
 	var offices []OfficeInfo
 
@@ -165,10 +172,16 @@ func findAddresses(contentURL string) ([]OfficeInfo, error) {
 	if err != nil {
 		return offices, err
 	}
+	if debug {
+		log.Printf("html fetched was: %s", html)
+	}
 
 	htmlText, err := html2text.FromString(string(html), html2text.Options{TextOnly: true})
 	if err != nil {
 		return offices, fmt.Errorf("can't parse html to string: %s", err)
+	}
+	if debug {
+		log.Printf("reduced html to text: %s", htmlText)
 	}
 
 	addressResponse, err := getOpenAIResponse(ADDRESS_PROMPT, htmlText, true)

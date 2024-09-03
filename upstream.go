@@ -13,6 +13,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const DEBUG_INFO = false
+
 // sometimes suite numbers contain dots, or letters
 var SuiteNumbersRegex = regexp.MustCompile(`^[a-z0-9\.]+$`)
 
@@ -20,7 +22,7 @@ type YAMLLegislatorOffices struct {
 	ID struct {
 		Bioguide string `yaml:"bioguide"`
 		Govtrack int    `yaml:"govtrack"`
-		Thomas   string `yaml:"thomas"`
+		Thomas   string `yaml:"thomas,omitempty"`
 	} `yaml:"id"`
 	Offices []YAMLOffice `yaml:"offices"`
 }
@@ -35,8 +37,9 @@ type YAMLOffice struct {
 	Zip       string  `yaml:"zip"`
 	Latitude  float64 `yaml:"latitude,omitempty"`
 	Longitude float64 `yaml:"longitude,omitempty"`
-	Phone     string  `yaml:"phone"`
+	Phone     string  `yaml:"phone,omitempty"`
 	Fax       string  `yaml:"fax,omitempty"`
+	Hours     string  `yaml:"hours,omitempty"`
 }
 
 func upstreamChanges() error {
@@ -74,6 +77,7 @@ func upstreamChanges() error {
 	for _, legislator := range legislators {
 		for _, generatedOffices := range officeList {
 			if legislator.ID.Bioguide == generatedOffices.Bioguide {
+				log.Printf("%s %s:", generatedOffices.URL, generatedOffices.Bioguide)
 				// now we have the right set of offices, check which ones already exist and which ones need to be created or removed
 
 				// loop through the existing offices
@@ -96,16 +100,18 @@ func upstreamChanges() error {
 					}
 
 					if !isFound {
+						log.Printf("removing office in %s", legislator.Offices[i].City)
 						statsRemovedOffices++
 						legislator.Offices = append(legislator.Offices[:i], legislator.Offices[i+1:]...)
 					}
 				}
 				for _, remainingGenOffice := range genOfficesCopy {
 					// skip any main offices in dc
-					if strings.ToLower(remainingGenOffice.City) == "washington" || strings.ToLower(remainingGenOffice.State) == "d.c." {
+					if strings.ToLower(remainingGenOffice.City) == "washington" || strings.ToLower(remainingGenOffice.State) == "d.c." || strings.ToLower(remainingGenOffice.State) == "dc" {
 						continue
 					}
 
+					log.Printf("adding office in %s", remainingGenOffice.City)
 					statsNewOffices++
 					legislator.Offices = append(legislator.Offices, officeFromGenOffice(remainingGenOffice, legislator.ID.Bioguide, legislator.Offices))
 				}
@@ -145,7 +151,7 @@ func officeEquals(office YAMLOffice, genOffice OfficeInfo) bool {
 		normalizeCity(office.City) == normalizeCity(genOffice.City) &&
 		normalizeSuite(office.Suite) == normalizeSuite(genOffice.Suite)
 
-	if !sameAddress {
+	if !sameAddress && DEBUG_INFO {
 		log.Printf("compared address: %s %s", normalizeAddress(office.Address), normalizeAddress(genOffice.Address))
 		log.Printf("compared city: %s %s", normalizeCity(office.City), normalizeCity(genOffice.City))
 		log.Printf("compared suite: %s %s", normalizeSuite(office.Suite), normalizeSuite(genOffice.Suite))

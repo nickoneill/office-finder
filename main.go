@@ -49,13 +49,19 @@ func main() {
 						Name:  "url",
 						Usage: "URL to scrape (optional, if not provided all URLs will be scraped)",
 					},
+					&cli.BoolFlag{
+						Name:  "debug",
+						Usage: "Enable debug mode",
+						Value: false,
+					},
 				},
 				Action: func(ctx *cli.Context) error {
 					url := ctx.String("url")
+					debug := ctx.Bool("debug")
 					if url == "" {
 						return scrapeAllURLs()
 					}
-					return scrapeOne(url)
+					return scrapeOne(url, debug)
 				},
 			},
 			{
