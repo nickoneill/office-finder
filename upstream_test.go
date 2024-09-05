@@ -124,6 +124,20 @@ func TestOfficeEquals(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "Street cardinality + abbr",
+			office: YAMLOffice{
+				Address: "2000 South Stemmons Freeway",
+				City:    "Los Angeles",
+				Suite:   "Suite 100",
+			},
+			genOffice: OfficeInfo{
+				Address: "2000 S. Stemmons Fwy.",
+				City:    "Los Angeles",
+				Suite:   "Suite 100",
+			},
+			want: true,
+		},
+		{
 			name: "Different suite",
 			office: YAMLOffice{
 				Address: "123 Main St",

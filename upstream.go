@@ -74,9 +74,9 @@ func upstreamChanges() error {
 	statsNewOffices := 0
 	statsRemovedOffices := 0
 	// search through each list to match the office lists to compare
-	for _, legislator := range legislators {
+	for li, _ := range legislators {
 		for _, generatedOffices := range officeList {
-			if legislator.ID.Bioguide == generatedOffices.Bioguide {
+			if legislators[li].ID.Bioguide == generatedOffices.Bioguide {
 				log.Printf("%s %s:", generatedOffices.URL, generatedOffices.Bioguide)
 				// now we have the right set of offices, check which ones already exist and which ones need to be created or removed
 
@@ -90,19 +90,19 @@ func upstreamChanges() error {
 
 				genOfficesCopy := generatedOffices.Offices
 				// loop both office lists in reverse so we can remove any items that have been found
-				for i := len(legislator.Offices) - 1; i >= 0; i-- {
+				for i := len(legislators[li].Offices) - 1; i >= 0; i-- {
 					isFound := false
 					for j := len(genOfficesCopy) - 1; j >= 0; j-- {
-						if officeEquals(legislator.Offices[i], genOfficesCopy[j]) {
+						if officeEquals(legislators[li].Offices[i], genOfficesCopy[j]) {
 							isFound = true
 							genOfficesCopy = append(genOfficesCopy[:j], genOfficesCopy[j+1:]...)
 						}
 					}
 
 					if !isFound {
-						log.Printf("removing office in %s", legislator.Offices[i].City)
+						log.Printf("removing office in %s", legislators[li].Offices[i].City)
 						statsRemovedOffices++
-						legislator.Offices = append(legislator.Offices[:i], legislator.Offices[i+1:]...)
+						legislators[li].Offices = append(legislators[li].Offices[:i], legislators[li].Offices[i+1:]...)
 					}
 				}
 				for _, remainingGenOffice := range genOfficesCopy {
@@ -113,7 +113,7 @@ func upstreamChanges() error {
 
 					log.Printf("adding office in %s", remainingGenOffice.City)
 					statsNewOffices++
-					legislator.Offices = append(legislator.Offices, officeFromGenOffice(remainingGenOffice, legislator.ID.Bioguide, legislator.Offices))
+					legislators[li].Offices = append(legislators[li].Offices, officeFromGenOffice(remainingGenOffice, legislators[li].ID.Bioguide, legislators[li].Offices))
 				}
 			}
 		}

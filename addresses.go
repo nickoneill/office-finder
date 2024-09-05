@@ -19,6 +19,7 @@ var streetTypeAbbreviations = map[string]string{
 	"terrace":   "ter",
 	"way":       "way",
 	"parkway":   "pkwy",
+	"freeway":   "fwy",
 }
 
 var cardinalityAbbreviations = map[string]string{
