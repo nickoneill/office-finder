@@ -116,6 +116,7 @@ func validateLegislators() error {
 	}
 
 	// TODO: ensure offices listed are in the state they're supposed to be
+	// TODO: ensure states are two letter abbreviations
 
 	return nil
 }

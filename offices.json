@@ -9807,7 +9807,7 @@
         "address": "475 Sierra Street",
         "building": "Tri County Fairgrounds",
         "city": "Bishop",
-        "state": "California",
+        "state": "CA",
         "zip": "93514"
       },
       {
@@ -10359,7 +10359,7 @@
         "suite": "Suite 1410",
         "building": "James V. Hansen Federal Building",
         "city": "Ogden",
-        "state": "Utah",
+        "state": "UT",
         "zip": "84401",
         "phone": "801-392-9633",
         "fax": "801-392-9630"
@@ -11978,7 +11978,7 @@
         "suite": "2988",
         "building": "Jackson Federal Building",
         "city": "Seattle",
-        "state": "Washington",
+        "state": "WA",
         "zip": "98174",
         "phone": "(206) 553-5545"
       },
@@ -11986,7 +11986,7 @@
         "address": "2930 Wetmore Avenue",
         "suite": "Ste. 9D",
         "city": "Everett",
-        "state": "Washington",
+        "state": "WA",
         "zip": "98201",
         "phone": "(425) 259-6515"
       },
@@ -11994,7 +11994,7 @@
         "address": "1301 A Street",
         "suite": "Ste 213",
         "city": "Tacoma",
-        "state": "Washington",
+        "state": "WA",
         "zip": "98402",
         "phone": "(253) 572-3636"
       },
@@ -12002,7 +12002,7 @@
         "address": "1323 Officer’s Row",
         "building": "The Marshall House",
         "city": "Vancouver",
-        "state": "Washington",
+        "state": "WA",
         "zip": "98661",
         "phone": "(360) 696-7797"
       },
@@ -12010,7 +12010,7 @@
         "address": "920 West Riverside Avenue",
         "suite": "Ste 485",
         "city": "Spokane",
-        "state": "Washington",
+        "state": "WA",
         "zip": "99201",
         "phone": "(509) 624-9515"
       },
@@ -12322,7 +12322,7 @@
         "address": "250 East Wisconsin",
         "suite": "Suite 950",
         "city": "Milwaukee",
-        "state": "Wisconsin",
+        "state": "WI",
         "zip": "53202",
         "phone": "(414) 297-1140",
         "fax": "(414) 297-1086"
@@ -15130,7 +15130,7 @@
         "suite": "159",
         "building": "Suite 159",
         "city": "Pensacola",
-        "state": "Florida",
+        "state": "FL",
         "zip": "32502",
         "phone": "(850) 433-2603"
       },
@@ -16154,7 +16154,7 @@
         "address": "245 E. Olive Avenue",
         "suite": "#200",
         "city": "Burbank",
-        "state": "California",
+        "state": "CA",
         "zip": "91502",
         "phone": "(818) 450-2900",
         "fax": "(818) 450-2928"

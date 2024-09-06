@@ -74,10 +74,16 @@ func upstreamChanges() error {
 
 	statsNewOffices := 0
 	statsRemovedOffices := 0
+	statsNewLegislators := 0
+
+	// Create a map to keep track of processed bioguides
+	processedBioguides := make(map[string]bool)
+
 	// search through each list to match the office lists to compare
 	for li, _ := range legislators {
 		for _, generatedOffices := range officeList {
 			if legislators[li].ID.Bioguide == generatedOffices.Bioguide {
+				processedBioguides[generatedOffices.Bioguide] = true
 				log.Printf("%s %s:", generatedOffices.URL, generatedOffices.Bioguide)
 				// now we have the right set of offices, check which ones already exist and which ones need to be created or removed
 
@@ -125,7 +131,37 @@ func upstreamChanges() error {
 		}
 	}
 
-	log.Printf("found %d new offices, removed %d old offices", statsNewOffices, statsRemovedOffices)
+	// Process any remaining legislators and offices from officeList
+	for _, generatedOffices := range officeList {
+		if !processedBioguides[generatedOffices.Bioguide] {
+			log.Printf("Adding new legislator: %s", generatedOffices.Bioguide)
+			statsNewLegislators++
+			newLegislator := YAMLLegislatorOffices{
+				ID: struct {
+					Bioguide string `yaml:"bioguide"`
+					Govtrack int    `yaml:"govtrack"`
+					Thomas   string `yaml:"thomas,omitempty"`
+				}{
+					Bioguide: generatedOffices.Bioguide,
+					// TODO: Look up the govtrack ID
+				},
+				Offices: []YAMLOffice{},
+			}
+
+			for _, office := range generatedOffices.Offices {
+				// Skip Washington DC offices as before
+				if strings.ToLower(office.City) == "washington" || strings.ToLower(office.State) == "d.c." || strings.ToLower(office.State) == "dc" {
+					continue
+				}
+				newLegislator.Offices = append(newLegislator.Offices, officeFromGenOffice(office, generatedOffices.Bioguide, newLegislator.Offices))
+				statsNewOffices++
+			}
+
+			legislators = append(legislators, newLegislator)
+		}
+	}
+
+	log.Printf("found %d new offices, removed %d old offices, added %d new legislators", statsNewOffices, statsRemovedOffices, statsNewLegislators)
 
 	updatedYAML, err := yaml.Marshal(legislators)
 	if err != nil {
