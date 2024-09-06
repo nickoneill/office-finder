@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -176,8 +177,31 @@ func officeFromGenOffice(genOffice OfficeInfo, bioguide string, existingOffices 
 	}
 }
 
+// nextOfficeKey generates subsequent city keys for duplicates like philadelphia-1, philadelphia-2, etc
 func nextOfficeKey(bioguide, city string, existingOffices []YAMLOffice) string {
-	return fmt.Sprintf("%s-%s", bioguide, cityKey(city))
+	baseCityKey := fmt.Sprintf("%s-%s", bioguide, cityKey(city))
+
+	cityCount := 0
+	for _, office := range existingOffices {
+		if strings.HasPrefix(office.ID, baseCityKey) {
+			suffix := strings.TrimPrefix(office.ID, baseCityKey)
+			if suffix == "" {
+				cityCount = 1
+				continue
+			}
+			if suffix[0] == '-' {
+				num, err := strconv.Atoi(suffix[1:])
+				if err == nil {
+					cityCount = num + 1
+				}
+			}
+		}
+	}
+
+	if cityCount > 0 {
+		return fmt.Sprintf("%s-%d", baseCityKey, cityCount)
+	}
+	return baseCityKey
 }
 
 func formatSuite(suite string) string {

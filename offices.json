@@ -24,8 +24,8 @@
       },
       {
         "address": "1710 Alabama Avenue",
-        "building": "Carl Elliott Building",
         "suite": "247",
+        "building": "Carl Elliott Building",
         "city": "Jasper",
         "state": "AL",
         "zip": "35501",
@@ -1283,7 +1283,7 @@
     "url": "https://www.booker.senate.gov",
     "offices": [
       {
-        "address": "One Gateway Center, 23rd Floor",
+        "address": "One Gateway Center",
         "suite": "23rd Floor",
         "building": "One Gateway Center",
         "city": "Newark",
@@ -1378,7 +1378,6 @@
       {
         "address": "1901 N. Fort Myer Dr.",
         "suite": "900",
-        "building": "Suite 900",
         "city": "Arlington",
         "state": "VA",
         "zip": "22209",
@@ -1402,7 +1401,6 @@
       },
       {
         "address": "205 East Harnett Street",
-        "building": "Mascoutah",
         "city": "Mascoutah",
         "state": "IL",
         "zip": "62258",
@@ -1621,7 +1619,7 @@
         "phone": "(202) 225-2635"
       },
       {
-        "address": "2509 S. Power Rd. #204",
+        "address": "2509 S. Power Rd.",
         "suite": "#204",
         "building": "Superstition Plaza",
         "city": "Mesa",
@@ -1636,32 +1634,28 @@
     "url": "https://bluntrochester.house.gov",
     "offices": [
       {
-        "address": "Wilmington, Del.",
-        "building": "United States Congress Office",
-        "city": "Wilmington",
-        "state": "DE",
-        "zip": ""
-      },
-      {
-        "address": "New Castle, Del.",
-        "building": "Constituent Resource Fair Venue",
-        "city": "New Castle",
-        "state": "DE",
-        "zip": ""
-      },
-      {
-        "address": "Wilmington, Del.",
-        "building": "Congresswoman's Office",
-        "city": "Wilmington",
-        "state": "DE",
-        "zip": ""
-      },
-      {
-        "address": "Washington, D.C.",
-        "building": "United States Congress",
+        "address": "1724 Longworth House Office Building",
+        "building": "Longworth House Office Building",
         "city": "Washington",
         "state": "DC",
-        "zip": ""
+        "zip": "20515",
+        "phone": "(202) 225-4165"
+      },
+      {
+        "address": "1105 N Market St",
+        "suite": "400",
+        "city": "Wilmington",
+        "state": "DE",
+        "zip": "19801",
+        "phone": "(302) 830-2330"
+      },
+      {
+        "address": "28 The Circle",
+        "suite": "2",
+        "city": "Georgetown",
+        "state": "DE",
+        "zip": "19947",
+        "phone": "(302) 858-4773"
       }
     ]
   },
@@ -2281,7 +2275,7 @@
         "phone": "(202) 224-4524"
       },
       {
-        "address": "10201 Martin Luther King, Jr. Hwy",
+        "address": "10201 Martin Luther King Jr. Hwy",
         "suite": "Suite 210",
         "city": "Bowie",
         "state": "MD",
@@ -2328,7 +2322,7 @@
     "url": "https://www.carper.senate.gov",
     "offices": [
       {
-        "address": "301 North Walnut St., Suite 102L-1",
+        "address": "301 North Walnut St.",
         "suite": "102L-1",
         "city": "Wilmington",
         "state": "DE",
@@ -2337,7 +2331,7 @@
         "fax": "(302) 573-6434"
       },
       {
-        "address": "555 E Loockerman St., Suite 300",
+        "address": "555 E Loockerman St.",
         "suite": "300",
         "city": "Dover",
         "state": "DE",
@@ -2370,7 +2364,6 @@
     "offices": [
       {
         "address": "274 Cannon House Office Building",
-        "suite": "N/A",
         "building": "Cannon House Office Building",
         "city": "Washington",
         "state": "DC",
@@ -2380,8 +2373,6 @@
       },
       {
         "address": "176 Municipal Way",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Santee",
         "state": "SC",
         "zip": "29142",
@@ -2390,18 +2381,14 @@
       },
       {
         "address": "129 South Harvin Street",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Sumter",
         "state": "SC",
         "zip": "29150",
-        "phone": "(803) 883-5020",
-        "fax": "N/A"
+        "phone": "(803) 883-5020"
       },
       {
         "address": "1225 Lady Street",
         "suite": "Suite 200",
-        "building": "N/A",
         "city": "Columbia",
         "state": "SC",
         "zip": "29201",
@@ -2410,8 +2397,6 @@
       },
       {
         "address": "130 W. Main Street",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Kingstree",
         "state": "SC",
         "zip": "29556",
@@ -2484,7 +2469,7 @@
         "fax": "(208) 334-9044"
       },
       {
-        "address": "610 Hubbard",
+        "address": "610 Hubbard Ave",
         "suite": "209",
         "building": "Senate Office Building",
         "city": "Coeur d' Alene",
@@ -2980,11 +2965,11 @@
         "zip": ""
       },
       {
-        "address": "Brooklyn, NY",
-        "building": "Brooklyn NY",
+        "address": "222 Lenox Road",
+        "suite": "Suites 1 & 2",
         "city": "Brooklyn",
         "state": "NY",
-        "zip": ""
+        "zip": "11226"
       }
     ]
   },
@@ -3270,7 +3255,7 @@
         "fax": "(626) 304-0132"
       },
       {
-        "address": "415 W. Foothill Blvd, Ste 122",
+        "address": "415 W. Foothill Blvd",
         "suite": "Ste 122",
         "city": "Claremont",
         "state": "CA",
@@ -3431,7 +3416,6 @@
       {
         "address": "727 E. Cesar E. Chavez Blvd",
         "suite": "B-128",
-        "building": "San Antonio Office",
         "city": "San Antonio",
         "state": "TX",
         "zip": "78206",

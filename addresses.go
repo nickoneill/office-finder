@@ -20,13 +20,19 @@ var streetTypeAbbreviations = map[string]string{
 	"way":       "way",
 	"parkway":   "pkwy",
 	"freeway":   "fwy",
+	"highway":   "hwy",
+	"plaza":     "plz",
 }
 
 var cardinalityAbbreviations = map[string]string{
-	"east":  "e",
-	"west":  "w",
-	"north": "n",
-	"south": "s",
+	"east":      "e",
+	"west":      "w",
+	"north":     "n",
+	"south":     "s",
+	"southwest": "sw",
+	"northeast": "ne",
+	"southeast": "se",
+	"northwest": "nw",
 }
 
 // normalize addresses for comparison, removing spaces and punctuation and always using abbreviations

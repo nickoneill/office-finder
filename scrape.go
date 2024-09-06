@@ -91,10 +91,15 @@ func processURLs(urls map[string]string) []OfficeList {
 	return results
 }
 
-func scrapeOne(url string, debug bool) error {
-	addresses, err := findAddresses(url, debug)
+func scrapeOne(scrapeURL string, debug bool) error {
+	parsedURL, err := url.Parse(scrapeURL)
 	if err != nil {
-		return fmt.Errorf("error finding addresses for %s: %v", url, err)
+		return fmt.Errorf("couldn't parse url: %s", err)
+	}
+
+	addresses, err := findAddresses(scrapeURL, debug)
+	if err != nil {
+		return fmt.Errorf("error finding addresses for %s: %v", scrapeURL, err)
 	}
 	if debug {
 		log.Printf("found addresses: %+v", addresses)
@@ -111,10 +116,12 @@ func scrapeOne(url string, debug bool) error {
 		return fmt.Errorf("error parsing offices.json: %v", err)
 	}
 
+	domain := fmt.Sprintf("%s://%s", parsedURL.Scheme, parsedURL.Host)
+
 	bioguide := ""
 	updated := false
 	for i, office := range officeList {
-		if office.URL == url {
+		if office.URL == domain {
 			officeList[i].Offices = addresses
 			bioguide = office.Bioguide
 			updated = true

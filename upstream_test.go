@@ -193,3 +193,60 @@ func TestFormatPhone(t *testing.T) {
 		}
 	}
 }
+
+func TestNextOfficeKey(t *testing.T) {
+	testCases := []struct {
+		name            string
+		bioguide        string
+		city            string
+		existingOffices []YAMLOffice
+		expected        string
+	}{
+		{
+			name:            "No existing offices",
+			bioguide:        "A000001",
+			city:            "New York",
+			existingOffices: []YAMLOffice{},
+			expected:        "A000001-new_york",
+		},
+		{
+			name:     "One existing office",
+			bioguide: "A000001",
+			city:     "New York",
+			existingOffices: []YAMLOffice{
+				{ID: "A000001-new_york"},
+			},
+			expected: "A000001-new_york-1",
+		},
+		{
+			name:     "Multiple existing offices",
+			bioguide: "A000001",
+			city:     "New York",
+			existingOffices: []YAMLOffice{
+				{ID: "A000001-new_york"},
+				{ID: "A000001-new_york-1"},
+			},
+			expected: "A000001-new_york-2",
+		},
+		{
+			name:     "Multiple existing offices 2",
+			bioguide: "A000001",
+			city:     "New York",
+			existingOffices: []YAMLOffice{
+				{ID: "A000001-new_york"},
+				{ID: "A000001-new_york-1"},
+				{ID: "A000001-new_york-2"},
+			},
+			expected: "A000001-new_york-3",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := nextOfficeKey(tc.bioguide, tc.city, tc.existingOffices)
+			if result != tc.expected {
+				t.Errorf("nextOfficeKey(%q, %q, %v) = %q, expected %q", tc.bioguide, tc.city, tc.existingOffices, result, tc.expected)
+			}
+		})
+	}
+}
