@@ -109,7 +109,12 @@ func upstreamChanges() error {
 				for _, remainingGenOffice := range genOfficesCopy {
 					// skip any main offices in dc
 					if strings.ToLower(remainingGenOffice.City) == "washington" || strings.ToLower(remainingGenOffice.State) == "d.c." || strings.ToLower(remainingGenOffice.State) == "dc" {
-						continue
+						// special casing one office for EHN until I can think of a better way to handle this
+						if generatedOffices.Bioguide == "N000147" && strings.HasPrefix(remainingGenOffice.Address, "1300 Pennsylvania") {
+							// don't skip, add the office
+						} else {
+							continue
+						}
 					}
 
 					log.Printf("adding office in %s", remainingGenOffice.City)

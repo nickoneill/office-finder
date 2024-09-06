@@ -2966,7 +2966,7 @@
       },
       {
         "address": "222 Lenox Road",
-        "suite": "Suites 1 & 2",
+        "suite": "Suites 1 \u0026 2",
         "city": "Brooklyn",
         "state": "NY",
         "zip": "11226"
@@ -4486,7 +4486,6 @@
       {
         "address": "300 East 8th St",
         "suite": "7th Floor",
-        "building": "7th Floor",
         "city": "Austin",
         "state": "TX",
         "zip": "78701",
@@ -5435,7 +5434,7 @@
         "phone": "(202) 225-6216"
       },
       {
-        "address": "7701 E. Kellogg, Ste. 510",
+        "address": "7701 E. Kellogg",
         "suite": "Ste. 510",
         "city": "Wichita",
         "state": "KS",
@@ -5658,7 +5657,7 @@
         "phone": "202-225-9890"
       },
       {
-        "address": "7499 West Atlantic Ave, Unit 206",
+        "address": "7499 West Atlantic Ave",
         "suite": "Unit 206",
         "city": "Delray Beach",
         "state": "FL",
@@ -6297,8 +6296,7 @@
       },
       {
         "address": "210 Walnut Street",
-        "suite": "721 Federal Building",
-        "building": "721 Federal Building",
+        "suite": "721",
         "city": "Des Moines",
         "state": "IA",
         "zip": "50309",
@@ -6307,8 +6305,7 @@
       },
       {
         "address": "531 Commercial Street",
-        "suite": "210 Waterloo Building",
-        "building": "210 Waterloo Building",
+        "suite": "210",
         "city": "Waterloo",
         "state": "IA",
         "zip": "50701",
@@ -6317,8 +6314,7 @@
       },
       {
         "address": "320 6th Street",
-        "suite": "120 Federal Building",
-        "building": "120 Federal Building",
+        "suite": "120",
         "city": "Sioux City",
         "state": "IA",
         "zip": "51101",
@@ -6328,7 +6324,6 @@
       {
         "address": "2146 27th Avenue",
         "suite": "Suite 550",
-        "building": "Suite 550",
         "city": "Council Bluffs",
         "state": "IA",
         "zip": "51501",
@@ -6338,7 +6333,6 @@
       {
         "address": "111 7th Avenue SE, Box 13",
         "suite": "Suite 6800",
-        "building": "Suite 6800",
         "city": "Cedar Rapids",
         "state": "IA",
         "zip": "52401",
@@ -6348,7 +6342,6 @@
       {
         "address": "201 West 2nd Street",
         "suite": "Suite 720",
-        "building": "Suite 720",
         "city": "Davenport",
         "state": "IA",
         "zip": "52801",
@@ -6427,15 +6420,7 @@
         "fax": "928-343-7949"
       },
       {
-        "address": "PO Box 4105",
-        "city": "Somerton",
-        "state": "AZ",
-        "zip": "85350",
-        "phone": "928-343-7933"
-      },
-      {
         "address": "Tolleson, AZ 85353",
-        "suite": "Virtual Office",
         "city": "Tolleson",
         "state": "AZ",
         "zip": "85353",
@@ -6443,7 +6428,8 @@
         "fax": "520-622-0198"
       },
       {
-        "address": "101 W. Irvington Rd. Bldg 4",
+        "address": "101 W. Irvington Rd.",
+        "suite": "Bldg 4",
         "building": "El Pueblo Community Center",
         "city": "Tucson",
         "state": "AZ",
@@ -6493,7 +6479,6 @@
       {
         "address": "780 Third Ave",
         "suite": "Ste 2601",
-        "building": "N/A",
         "city": "New York",
         "state": "NY",
         "zip": "10017",
@@ -6502,8 +6487,6 @@
       },
       {
         "address": "P.O. Box 749",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Yonkers",
         "state": "NY",
         "zip": "10710",
@@ -6513,7 +6496,6 @@
       {
         "address": "155 Pinelawn Road",
         "suite": "Suite 250 North",
-        "building": "N/A",
         "city": "Melville",
         "state": "NY",
         "zip": "11747",
@@ -6521,8 +6503,8 @@
         "fax": "(202) 224-0044"
       },
       {
-        "address": "11A Clinton Ave, Rm 821",
-        "suite": "N/A",
+        "address": "11A Clinton Ave",
+        "suite": "Room 821",
         "building": "Leo W. O’Brien Federal Office Bldg",
         "city": "Albany",
         "state": "NY",
@@ -6531,8 +6513,8 @@
         "fax": "(202) 224-0038"
       },
       {
-        "address": "100 South Clinton St, Rm 1470",
-        "suite": "N/A",
+        "address": "100 South Clinton St",
+        "suite": "Rm 1470",
         "building": "James M. Hanley Federal Bldg",
         "city": "Syracuse",
         "state": "NY",
@@ -6542,8 +6524,6 @@
       },
       {
         "address": "P.O. Box 273",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Lowville",
         "state": "NY",
         "zip": "13367",
@@ -6561,8 +6541,8 @@
         "fax": "(202) 224-0039"
       },
       {
-        "address": "100 State St, Rm 4195",
-        "suite": "N/A",
+        "address": "100 State St",
+        "suite": "Rm 4195",
         "building": "Kenneth B. Keating Federal Office Bldg",
         "city": "Rochester",
         "state": "NY",
@@ -6572,8 +6552,6 @@
       },
       {
         "address": "478 Russell",
-        "suite": "N/A",
-        "building": "N/A",
         "city": "Washington",
         "state": "DC",
         "zip": "20510",
@@ -7085,7 +7063,7 @@
         "phone": "(202) 225-2811"
       },
       {
-        "address": "128 N. Second St.",
+        "address": "128 N. 2nd St.",
         "suite": "Suite 104",
         "city": "Clarksville",
         "state": "TN",
@@ -7573,7 +7551,7 @@
         "fax": "(202) 224-2126"
       },
       {
-        "address": "300 Ala Moana Blvd. Room 3-106",
+        "address": "300 Ala Moana Blvd.",
         "suite": "Room 3-106",
         "city": "Honolulu",
         "state": "HI",
@@ -9519,7 +9497,7 @@
         "phone": "(731) 412-1037"
       },
       {
-        "address": "5900 Poplar Ave. Suite 202",
+        "address": "5900 Poplar Ave.",
         "suite": "202",
         "city": "Memphis",
         "state": "TN",
@@ -9535,7 +9513,7 @@
         "phone": "(731) 412-1043"
       },
       {
-        "address": "109 S. Highland Ave. Suite B-7",
+        "address": "109 S. Highland Ave.",
         "suite": "B-7",
         "building": "Ed Jones Federal Building",
         "city": "Jackson",
@@ -9962,7 +9940,7 @@
       },
       {
         "address": "142 West Alisal Street",
-        "building": "Room E116",
+        "suite": "Room E116",
         "city": "Salinas",
         "state": "CA",
         "zip": "93901",
@@ -9970,7 +9948,7 @@
       },
       {
         "address": "635 North First Street",
-        "building": "Suite B",
+        "suite": "Suite B",
         "city": "San Jose",
         "state": "CA",
         "zip": "95112",
@@ -10233,7 +10211,6 @@
       {
         "address": "500 Marquette Ave NW",
         "suite": "1460",
-        "building": "Suite 1460",
         "city": "Albuquerque",
         "state": "NM",
         "zip": "87102",
@@ -10243,7 +10220,6 @@
       {
         "address": "120 South Federal Place",
         "suite": "302",
-        "building": "Suite 302",
         "city": "Santa Fe",
         "state": "NM",
         "zip": "87501",
@@ -10253,7 +10229,6 @@
       {
         "address": "1103 National Avenue",
         "suite": "210",
-        "building": "Room 210",
         "city": "Las Vegas",
         "state": "NM",
         "zip": "87701",
@@ -10263,7 +10238,6 @@
       {
         "address": "201 North Church Street",
         "suite": "201B",
-        "building": "Suite 201B",
         "city": "Las Cruces",
         "state": "NM",
         "zip": "88001",
@@ -10273,7 +10247,6 @@
       {
         "address": "100 South Ave A",
         "suite": "113",
-        "building": "Suite 113",
         "city": "Portales",
         "state": "NM",
         "zip": "88130",
@@ -10394,7 +10367,6 @@
       {
         "address": "111 East Tabernacle Street",
         "suite": "Suite #324",
-        "building": "Office of Senator Michael S. Lee",
         "city": "St. George",
         "state": "UT",
         "zip": "84770",
@@ -10608,7 +10580,6 @@
       {
         "address": "2204 El Camino Real",
         "suite": "314",
-        "building": "Suite 314",
         "city": "Oceanside",
         "state": "CA",
         "zip": "92054",
@@ -10617,7 +10588,6 @@
       {
         "address": "33282 Golden Lantern",
         "suite": "102",
-        "building": "Suite 102",
         "city": "Dana Point",
         "state": "CA",
         "zip": "92629",
@@ -10957,6 +10927,7 @@
       },
       {
         "address": "15 New Sudbury St",
+        "suite": "975",
         "building": "JFK Federal Building",
         "city": "Boston",
         "state": "MA",
@@ -11866,14 +11837,28 @@
     "url": "https://mfume.house.gov",
     "offices": [
       {
-        "address": "555 M Street SE",
-        "suite": "Room 1234",
-        "building": "Rayburn House Office Building",
+        "address": "2263 Rayburn HOB",
+        "building": "Rayburn HOB",
         "city": "Washington",
         "state": "DC",
         "zip": "20515",
-        "phone": "(202) 555-0177",
-        "fax": "(202) 555-0144"
+        "phone": "(202) 225-4741",
+        "fax": "(202) 225-3178"
+      },
+      {
+        "address": "1010 Park Avenue",
+        "suite": "105",
+        "city": "Baltimore",
+        "state": "MD",
+        "zip": "21201",
+        "phone": "(410) 685-9199"
+      },
+      {
+        "address": "754 Frederick Road",
+        "city": "Catonsville",
+        "state": "MD",
+        "zip": "21228",
+        "phone": "(410) 818-2120"
       }
     ]
   },
@@ -11989,7 +11974,8 @@
         "phone": "(202) 224-2621"
       },
       {
-        "address": "2988 Jackson Federal Building",
+        "address": "915 2nd Avenue",
+        "suite": "2988",
         "building": "Jackson Federal Building",
         "city": "Seattle",
         "state": "Washington",
@@ -12396,7 +12382,6 @@
       {
         "address": "1101 K Street NW",
         "suite": "Suite 205",
-        "building": "Suite 205",
         "city": "Washington",
         "state": "DC",
         "zip": "20510",
@@ -12404,7 +12389,7 @@
         "fax": "(202) 224-0244"
       },
       {
-        "address": "121 SW Salmon St Suite 1400",
+        "address": "121 SW Salmon St",
         "suite": "Suite 1400",
         "building": "Mark O. Hatfield United States Courthouse",
         "city": "Portland",
@@ -12414,7 +12399,7 @@
         "fax": "(503) 326-3381"
       },
       {
-        "address": "1050 SW 6th Ave Suite 140",
+        "address": "1050 SW 6th Ave",
         "suite": "Suite 140",
         "building": "United States District Court",
         "city": "Portland",
@@ -12431,7 +12416,6 @@
     "offices": [
       {
         "address": "2256 Rayburn House Office Building",
-        "suite": "N/A",
         "building": "Rayburn House Office Building",
         "city": "Washington",
         "state": "DC",
@@ -12442,22 +12426,18 @@
       {
         "address": "1020 15th Street",
         "suite": "11",
-        "building": "N/A",
         "city": "Modesto",
         "state": "CA",
         "zip": "95354",
-        "phone": "209-550-6910",
-        "fax": "N/A"
+        "phone": "209-550-6910"
       },
       {
         "address": "4359 Town Center Blvd.",
         "suite": "210",
-        "building": "N/A",
         "city": "El Dorado Hills",
         "state": "CA",
         "zip": "95762",
-        "phone": "916-786-5560",
-        "fax": "N/A"
+        "phone": "916-786-5560"
       }
     ]
   },
@@ -12467,8 +12447,8 @@
     "offices": [
       {
         "address": "306 Hart Senate Office Building",
-        "city": "Washington D.C.",
-        "state": "",
+        "city": "Washington",
+        "state": "DC",
         "zip": "20510",
         "phone": "202-224-3954",
         "fax": "202-228-0002"
@@ -12476,7 +12456,6 @@
       {
         "address": "900 Pennsylvania Ave.",
         "suite": "Ste. 629",
-        "building": "Ste. 629",
         "city": "Charleston",
         "state": "WV",
         "zip": "25302",
@@ -12486,7 +12465,6 @@
       {
         "address": "261 Aikens Center",
         "suite": "Ste. 305",
-        "building": "Ste. 305",
         "city": "Martinsburg",
         "state": "WV",
         "zip": "25404",
@@ -12809,7 +12787,8 @@
       },
       {
         "address": "330 Pine Street",
-        "building": "Executive Plaza 4th Floor",
+        "suite": "4th Floor",
+        "building": "Executive Plaza",
         "city": "Williamsport",
         "state": "PA",
         "zip": "17701",
@@ -12848,7 +12827,8 @@
       },
       {
         "address": "61 N 3rd St",
-        "building": "Hamburg Municipal Center 2nd floor",
+        "suite": "2nd floor",
+        "building": "Hamburg Municipal Center",
         "city": "Hamburg",
         "state": "PA",
         "zip": "19526",
@@ -13572,7 +13552,6 @@
       {
         "address": "300 State Street",
         "suite": "200",
-        "building": "Suite 200",
         "city": "Springfield",
         "state": "MA",
         "zip": "01105",
@@ -14132,27 +14111,11 @@
     ]
   },
   {
-    "bioguide": "P000096",
-    "url": "https://pascrell.house.gov",
-    "offices": [
-      {
-        "address": "U.S. Capitol",
-        "suite": "Room H154",
-        "building": "U.S. Capitol",
-        "city": "Washington",
-        "state": "DC",
-        "zip": "20515–6601",
-        "phone": "(202) 225-7000"
-      }
-    ]
-  },
-  {
     "bioguide": "P000145",
     "url": "https://www.padilla.senate.gov",
     "offices": [
       {
         "address": "331 Hart Senate Office Building",
-        "building": "331 Hart Senate Office Building",
         "city": "Washington",
         "state": "DC",
         "zip": "20510",
@@ -14162,7 +14125,6 @@
       {
         "address": "255 E. Temple St.",
         "suite": "1860",
-        "building": "Suite 1860",
         "city": "Los Angeles",
         "state": "CA",
         "zip": "90012",
@@ -14172,7 +14134,6 @@
       {
         "address": "600 B Street",
         "suite": "2240",
-        "building": "Suite 2240",
         "city": "San Diego",
         "state": "CA",
         "zip": "92101",
@@ -14182,7 +14143,6 @@
       {
         "address": "2500 Tulare Street",
         "suite": "5290",
-        "building": "Suite 5290",
         "city": "Fresno",
         "state": "CA",
         "zip": "93721",
@@ -14192,7 +14152,6 @@
       {
         "address": "333 Bush Street",
         "suite": "3225",
-        "building": "Suite 3225",
         "city": "San Francisco",
         "state": "CA",
         "zip": "94104",
@@ -14202,7 +14161,6 @@
       {
         "address": "501 I Street",
         "suite": "7-800",
-        "building": "Suite 7-800",
         "city": "Sacramento",
         "state": "CA",
         "zip": "95814",
@@ -14374,7 +14332,6 @@
     "offices": [
       {
         "address": "295 Russell Senate Office Building",
-        "suite": "N/A",
         "building": "Russell Senate Office Building",
         "city": "Washington",
         "state": "D.C.",
@@ -14385,7 +14342,6 @@
       {
         "address": "563 Hub Boulevard",
         "suite": "Suite 201",
-        "building": "N/A",
         "city": "Bowling Green",
         "state": "KY",
         "zip": "42103",
@@ -14521,7 +14477,7 @@
     "url": "https://plaskett.house.gov",
     "offices": [
       {
-        "address": "9100 Havensight Port of Sale Mall",
+        "address": "9100 Havensight",
         "suite": "Suite 22",
         "building": "Port of Sale Mall",
         "city": "St. Thomas",
@@ -15064,34 +15020,67 @@
     "url": "https://www.risch.senate.gov",
     "offices": [
       {
-        "address": "789 Pine Blvd",
-        "suite": "Floor 3",
-        "building": "Health Building",
-        "city": "Smalltown",
-        "state": "IL",
-        "zip": "61401",
-        "phone": "555-222-5555",
-        "fax": "555-333-4444"
+        "address": "350 N. 9th St.",
+        "suite": "302",
+        "city": "Boise",
+        "state": "ID",
+        "zip": "83702",
+        "phone": "208-342-7985",
+        "fax": "208-343-2458"
       },
       {
-        "address": "123 Elm St",
-        "suite": "Suite 200",
-        "building": "Financial Plaza",
-        "city": "Springfield",
-        "state": "IL",
-        "zip": "62701",
-        "phone": "555-987-6543",
-        "fax": "555-123-4567"
+        "address": "610 Hubbard",
+        "suite": "213",
+        "building": "Harbor Plaza",
+        "city": "Coeur d'Alene",
+        "state": "ID",
+        "zip": "83814",
+        "phone": "208-667-6130",
+        "fax": "208-765-1743"
       },
       {
-        "address": "456 Oak Ave",
-        "suite": "Room 101",
-        "building": "Tech Center",
-        "city": "Metropolis",
-        "state": "IL",
-        "zip": "62960",
-        "phone": "555-123-4567",
-        "fax": "555-765-4321"
+        "address": "901 Pier View Drive",
+        "suite": "202A",
+        "city": "Idaho Falls",
+        "state": "ID",
+        "zip": "83402",
+        "phone": "208-523-5541",
+        "fax": "208-523-9373"
+      },
+      {
+        "address": "313 D Street",
+        "suite": "106",
+        "city": "Lewiston",
+        "state": "ID",
+        "zip": "83501",
+        "phone": "208-743-0792",
+        "fax": "208-746-7275"
+      },
+      {
+        "address": "275 South 5th Avenue",
+        "suite": "144",
+        "city": "Pocatello",
+        "state": "ID",
+        "zip": "83201",
+        "phone": "208-236-6817",
+        "fax": "208-236-6820"
+      },
+      {
+        "address": "1411 Falls Avenue East",
+        "suite": "201",
+        "city": "Twin Falls",
+        "state": "ID",
+        "zip": "83301",
+        "phone": "208-734-6780",
+        "fax": "208-734-3905"
+      },
+      {
+        "address": "483 Russell Senate Office Building",
+        "city": "Washington",
+        "state": "DC",
+        "zip": "20510",
+        "phone": "202-224-2752",
+        "fax": "202-224-2573"
       }
     ]
   },
@@ -15100,14 +15089,75 @@
     "url": "https://www.rubio.senate.gov",
     "offices": [
       {
-        "address": "Senator Marco Rubio's Office",
-        "suite": "Room 284",
-        "building": "United States Senate",
-        "city": "Washington",
+        "address": "2120 Main Street",
+        "suite": "200",
+        "building": "Room 200",
+        "city": "Fort Myers",
+        "state": "FL",
+        "zip": "33901",
+        "phone": "(239) 318-6464"
+      },
+      {
+        "address": "300 North Hogan Street",
+        "suite": "8-111",
+        "building": "Suite #8-111",
+        "city": "Jacksonville",
+        "state": "FL",
+        "zip": "32202",
+        "phone": "(904) 354-4300"
+      },
+      {
+        "address": "9130 South Dadeland Boulevard",
+        "suite": "1510",
+        "building": "Suite 1510",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33156",
+        "phone": "305-596-4224",
+        "fax": "305-596-4345"
+      },
+      {
+        "address": "201 South Orange Avenue",
+        "suite": "350",
+        "building": "Suite 350",
+        "city": "Orlando",
+        "state": "FL",
+        "zip": "32801",
+        "phone": "(407) 254-2573"
+      },
+      {
+        "address": "1 North Palafox St.",
+        "suite": "159",
+        "building": "Suite 159",
+        "city": "Pensacola",
+        "state": "Florida",
+        "zip": "32502",
+        "phone": "(850) 433-2603"
+      },
+      {
+        "address": "402 South Monroe Street",
+        "suite": "2105E",
+        "building": "Suite 2105E",
+        "city": "Tallahassee",
+        "state": "FL",
+        "zip": "32399",
+        "phone": "(850) 599-9100"
+      },
+      {
+        "address": "501 E. Polk Street",
+        "suite": "601",
+        "building": "Suite 601",
+        "city": "Tampa",
+        "state": "FL",
+        "zip": "33602",
+        "phone": "(813) 947-6288"
+      },
+      {
+        "address": "284 Russell Senate Office Building",
+        "city": "Washington D.C.",
         "state": "DC",
         "zip": "20510",
-        "phone": "(202) 224-3041",
-        "fax": "(202) 224-1234"
+        "phone": "(202) 224-3041"
       }
     ]
   },
@@ -15127,7 +15177,6 @@
       {
         "address": "81719 Doctor Carreon Blvd.",
         "suite": "Suite G",
-        "building": "Indio District Office",
         "city": "Indio",
         "state": "CA",
         "zip": "92201",
@@ -15136,7 +15185,6 @@
       {
         "address": "343 S. 8th Street",
         "suite": "Suite A",
-        "building": "El Centro District Office",
         "city": "El Centro",
         "state": "CA",
         "zip": "92243",
@@ -15145,7 +15193,6 @@
       {
         "address": "445 East Florida Ave",
         "suite": "2nd Floor",
-        "building": "Hemet District Office",
         "city": "Hemet",
         "state": "CA",
         "zip": "92543",
@@ -15640,7 +15687,7 @@
     "url": "https://www.schumer.senate.gov",
     "offices": [
       {
-        "address": "Leo O'Brien Building",
+        "address": "1 Clinton Ave.",
         "suite": "Room 827",
         "building": "Leo O'Brien Building",
         "city": "Albany",
@@ -15679,7 +15726,7 @@
       {
         "address": "780 Third Avenue",
         "suite": "Suite 2301",
-        "city": "New York City",
+        "city": "New York",
         "state": "NY",
         "zip": "10017",
         "phone": "(212) 486-4430",
@@ -15870,7 +15917,8 @@
         "phone": "(202) 225-8901"
       },
       {
-        "address": "101 Evergreen Building, 15 S. Grady Way",
+        "address": "15 S. Grady Way",
+        "suite": "101",
         "building": "Evergreen Building",
         "city": "Renton",
         "state": "WA",
@@ -16514,8 +16562,8 @@
         "fax": "(205) 752-5899"
       },
       {
-        "address": "101 South Lawrence St. Courthouse Annex",
-        "suite": "3",
+        "address": "101 South Lawrence St.",
+        "suite": "Annex 3",
         "building": "Courthouse Annex",
         "city": "Montgomery",
         "state": "AL",
@@ -17851,7 +17899,7 @@
         "fax": "(202) 225-6754"
       },
       {
-        "address": "120 West 3rd St, STE. 305",
+        "address": "120 West 3rd St",
         "suite": "STE. 305",
         "city": "Dayton",
         "state": "OH",
@@ -18558,7 +18606,7 @@
         "fax": "(202) 225-9702"
       },
       {
-        "address": "1881 Sylvan Ave, Ste. 108",
+        "address": "1881 Sylvan Ave",
         "suite": "Ste. 108",
         "building": "JP Morgan Chase Building",
         "city": "Dallas",
@@ -19124,24 +19172,52 @@
     "url": "https://www.warner.senate.gov",
     "offices": [
       {
-        "address": "123 Main St",
-        "suite": "Suite 101",
-        "building": "Main Plaza",
-        "city": "Springfield",
-        "state": "IL",
-        "zip": "62701",
-        "phone": "555-9876",
-        "fax": "555-0123"
+        "address": "703 Hart Senate Office Building",
+        "building": "Hart Senate Office Building",
+        "city": "Washington",
+        "state": "DC",
+        "zip": "20510",
+        "phone": "202-224-2023"
       },
       {
-        "address": "456 Elm St",
-        "suite": "Room 202",
-        "building": "Downtown Tower",
-        "city": "Metropolis",
-        "state": "IL",
-        "zip": "62960",
-        "phone": "555-1234",
-        "fax": "555-0456"
+        "address": "180 West Main Street",
+        "suite": "Room 235",
+        "city": "Abingdon",
+        "state": "VA",
+        "zip": "24210",
+        "phone": "276-628-8158"
+      },
+      {
+        "address": "101 W. Main Street",
+        "suite": "Suite 7771",
+        "city": "Norfolk",
+        "state": "VA",
+        "zip": "23510",
+        "phone": "757-441-3079"
+      },
+      {
+        "address": "120 Luck Avenue, SW",
+        "suite": "Suite 108",
+        "city": "Roanoke",
+        "state": "VA",
+        "zip": "24011",
+        "phone": "540-857-2676"
+      },
+      {
+        "address": "919 E. Main Street",
+        "suite": "Suite 630",
+        "city": "Richmond",
+        "state": "VA",
+        "zip": "23219",
+        "phone": "804-775-2314"
+      },
+      {
+        "address": "8150 Leesburg Pike",
+        "suite": "Suite 700",
+        "city": "Vienna",
+        "state": "VA",
+        "zip": "22182",
+        "phone": "703-442-0670"
       }
     ]
   },
@@ -19231,7 +19307,7 @@
         "address": "3333 Pinnacle Hills Parkway",
         "suite": "Suite 120",
         "city": "Rogers",
-        "state": "Arkansas",
+        "state": "AR",
         "zip": "72758",
         "phone": "(479) 464-0446",
         "fax": "(479) 464-0063"
@@ -19240,7 +19316,7 @@
         "address": "6101 Phoenix Avenue",
         "suite": "Suite 4",
         "city": "Fort Smith",
-        "state": "Arkansas",
+        "state": "AR",
         "zip": "72903",
         "phone": "(479) 424-1146",
         "fax": "(479)-464-0063"

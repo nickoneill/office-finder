@@ -22,6 +22,8 @@ var streetTypeAbbreviations = map[string]string{
 	"freeway":   "fwy",
 	"highway":   "hwy",
 	"plaza":     "plz",
+	"trace":     "trce",
+	"center":    "ctr",
 }
 
 var cardinalityAbbreviations = map[string]string{

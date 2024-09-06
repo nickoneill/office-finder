@@ -115,5 +115,7 @@ func validateLegislators() error {
 		}
 	}
 
+	// TODO: ensure offices listed are in the state they're supposed to be
+
 	return nil
 }
