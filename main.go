@@ -78,6 +78,13 @@ func main() {
 					return upstreamChanges()
 				},
 			},
+			{
+				Name:  "lintYAML",
+				Usage: "Re-sort the yaml file and fill in other IDs",
+				Action: func(ctx *cli.Context) error {
+					return lintYAML()
+				},
+			},
 		},
 	}
 

@@ -12,6 +12,8 @@ import (
 type Legislator struct {
 	ID struct {
 		Bioguide string `yaml:"bioguide"`
+		Govtrack int    `yaml:"govtrack"`
+		Thomas   string `yaml:"thomas,omitempty"`
 	} `yaml:"id"`
 	Terms []struct {
 		Type         string `yaml:"type"`

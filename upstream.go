@@ -38,9 +38,9 @@ type YAMLOffice struct {
 	Zip       string  `yaml:"zip"`
 	Latitude  float64 `yaml:"latitude,omitempty"`
 	Longitude float64 `yaml:"longitude,omitempty"`
-	Phone     string  `yaml:"phone,omitempty"`
 	Fax       string  `yaml:"fax,omitempty"`
 	Hours     string  `yaml:"hours,omitempty"`
+	Phone     string  `yaml:"phone,omitempty"`
 }
 
 func upstreamChanges() error {
