@@ -37,10 +37,10 @@ type YAMLOffice struct {
 	City      string  `yaml:"city"`
 	State     string  `yaml:"state"`
 	Zip       string  `yaml:"zip"`
+	Hours     string  `yaml:"hours,omitempty"`
 	Latitude  float64 `yaml:"latitude,omitempty"`
 	Longitude float64 `yaml:"longitude,omitempty"`
 	Fax       string  `yaml:"fax,omitempty"`
-	Hours     string  `yaml:"hours,omitempty"`
 	Phone     string  `yaml:"phone,omitempty"`
 }
 
