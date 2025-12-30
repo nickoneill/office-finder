@@ -85,6 +85,8 @@ echo "$CHANGES" | jq -r '.changes[].bioguide' | while read -r BIOGUIDE; do
         git commit -m "Update district offices for $BIOGUIDE"
         git push origin "$BRANCH_NAME"
         gh pr create --repo "$FORK_REPO" \
+            --head "$BRANCH_NAME" \
+            --base main \
             --title "Update district offices for $BIOGUIDE" \
             --body "Updated office information scraped from official website."
         echo "  Created PR for $BIOGUIDE"
