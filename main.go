@@ -200,6 +200,27 @@ func main() {
 					return runMerge(bioguide, target, resultsDir)
 				},
 			},
+			{
+				Name:      "name",
+				Usage:     "Look up a legislator's display info by bioguide ID",
+				ArgsUsage: "<bioguide>",
+				Action: func(ctx *cli.Context) error {
+					if ctx.NArg() < 1 {
+						return fmt.Errorf("bioguide ID required")
+					}
+					bioguide := ctx.Args().Get(0)
+					info, err := lookupLegislatorInfo(bioguide)
+					if err != nil {
+						return err
+					}
+					if info == nil {
+						return fmt.Errorf("legislator %s not found", bioguide)
+					}
+					// Output format: "CA Rep. Pete Aguilar"
+					fmt.Printf("%s %s %s\n", info.State, info.Title, info.Name)
+					return nil
+				},
+			},
 		},
 	}
 

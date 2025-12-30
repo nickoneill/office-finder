@@ -15,6 +15,11 @@ type Legislator struct {
 		Govtrack int    `yaml:"govtrack"`
 		Thomas   string `yaml:"thomas,omitempty"`
 	} `yaml:"id"`
+	Name struct {
+		First        string `yaml:"first"`
+		Last         string `yaml:"last"`
+		OfficialFull string `yaml:"official_full"`
+	} `yaml:"name"`
 	Terms []struct {
 		Type         string `yaml:"type"`
 		Start        string `yaml:"start"`
@@ -24,6 +29,61 @@ type Legislator struct {
 		URL          string `yaml:"url"`
 		ClassAtStart string `yaml:"class"`
 	} `yaml:"terms"`
+}
+
+// LegislatorInfo contains display information for a legislator
+type LegislatorInfo struct {
+	Name  string // Official full name
+	State string // Two-letter state code
+	Title string // "Rep." or "Sen."
+}
+
+// lookupLegislatorInfo returns display info for a bioguide ID
+func lookupLegislatorInfo(bioguide string) (*LegislatorInfo, error) {
+	url := "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-current.yaml"
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var legislators []Legislator
+	if err := yaml.Unmarshal(body, &legislators); err != nil {
+		return nil, err
+	}
+
+	for _, leg := range legislators {
+		if leg.ID.Bioguide == bioguide {
+			info := &LegislatorInfo{}
+
+			if leg.Name.OfficialFull != "" {
+				info.Name = leg.Name.OfficialFull
+			} else {
+				info.Name = leg.Name.First + " " + leg.Name.Last
+			}
+
+			// Get state and type from latest term
+			if len(leg.Terms) > 0 {
+				latest := leg.Terms[len(leg.Terms)-1]
+				info.State = latest.State
+				if latest.Type == "sen" {
+					info.Title = "Sen."
+				} else {
+					info.Title = "Rep."
+				}
+			}
+
+			return info, nil
+		}
+	}
+
+	return nil, nil
 }
 
 // listRepURLs returns a map of bioguide IDs to website urls

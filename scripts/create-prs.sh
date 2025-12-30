@@ -76,20 +76,32 @@ echo "$CHANGES" | jq -r '.changes[].bioguide' | while read -r BIOGUIDE; do
     # Create branch and merge changes
     git checkout -B "$BRANCH_NAME" main
 
+    # Look up legislator info (format: "CA Rep. Pete Aguilar")
+    LEG_INFO=$(../office-finder name "$BIOGUIDE" 2>/dev/null || echo "")
+
     # Merge the result into legislators-district-offices.yaml
     ../office-finder merge --bioguide "$BIOGUIDE" --target legislators-district-offices.yaml --results "../$RESULTS_DIR"
 
     # Check if there are actual changes to commit
     if ! git diff --quiet legislators-district-offices.yaml; then
         git add legislators-district-offices.yaml
-        git commit -m "Update district offices for $BIOGUIDE"
+
+        if [ -n "$LEG_INFO" ]; then
+            PR_TITLE="Update district offices for $LEG_INFO"
+            PR_BODY="Updated office information for **$LEG_INFO** (bioguide: \`$BIOGUIDE\`) scraped from official website."
+        else
+            PR_TITLE="Update district offices for $BIOGUIDE"
+            PR_BODY="Updated office information for bioguide \`$BIOGUIDE\` scraped from official website."
+        fi
+
+        git commit -m "$PR_TITLE"
         git push --force origin "$BRANCH_NAME"
         gh pr create --repo "$FORK_REPO" \
             --head "$BRANCH_NAME" \
             --base main \
-            --title "Update district offices for $BIOGUIDE" \
-            --body "Updated office information scraped from official website."
-        echo "  Created PR for $BIOGUIDE"
+            --title "$PR_TITLE" \
+            --body "$PR_BODY"
+        echo "  Created PR for $LEG_INFO ($BIOGUIDE)"
     else
         echo "  No changes detected for $BIOGUIDE, skipping PR"
     fi
