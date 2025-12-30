@@ -64,35 +64,30 @@ echo "$CHANGES" | jq -r '.changes[].bioguide' | while read -r BIOGUIDE; do
     fi
 
     # Check if PR already exists
-    EXISTING_PR=$(gh pr list --repo "$UPSTREAM_REPO" --head "$FORK_REPO:$BRANCH_NAME" --json number --jq '.[0].number' 2>/dev/null || echo "")
+    EXISTING_PR=$(gh pr list --repo "$FORK_REPO" --head "$BRANCH_NAME" --json number --jq '.[0].number' 2>/dev/null || echo "")
     if [ -n "$EXISTING_PR" ]; then
         echo "  PR #$EXISTING_PR already exists for $BIOGUIDE, skipping..."
         continue
     fi
 
-    # Create branch
+    # Create branch and merge changes
     git checkout -B "$BRANCH_NAME" main
 
-    # Get legislator name from result file
-    NAME=$(yq -r '.[0].id.bioguide' "$RESULT_FILE" 2>/dev/null || echo "$BIOGUIDE")
+    # Merge the result into legislators-district-offices.yaml
+    ../office-finder merge --bioguide "$BIOGUIDE" --target legislators-district-offices.yaml --results "../$RESULTS_DIR"
 
-    # TODO: Merge the result into legislators-district-offices.yaml
-    # This requires more complex YAML merging logic
-    # For now, we'll just note that this needs to be done
-
-    # Read new offices from result
-    NEW_OFFICES=$(cat "$RESULT_FILE")
-
-    echo "  Would update offices for $BIOGUIDE"
-    echo "  Branch: $BRANCH_NAME"
-
-    # Commit and push would go here:
-    # git add legislators-district-offices.yaml
-    # git commit -m "Update district offices for $BIOGUIDE"
-    # git push origin "$BRANCH_NAME"
-    # gh pr create --repo "$UPSTREAM_REPO" \
-    #     --title "Update district offices for $NAME ($BIOGUIDE)" \
-    #     --body "Updated office information scraped from official website."
+    # Check if there are actual changes to commit
+    if ! git diff --quiet legislators-district-offices.yaml; then
+        git add legislators-district-offices.yaml
+        git commit -m "Update district offices for $BIOGUIDE"
+        git push origin "$BRANCH_NAME"
+        gh pr create --repo "$FORK_REPO" \
+            --title "Update district offices for $BIOGUIDE" \
+            --body "Updated office information scraped from official website."
+        echo "  Created PR for $BIOGUIDE"
+    else
+        echo "  No changes detected for $BIOGUIDE, skipping PR"
+    fi
 
     git checkout main
 done

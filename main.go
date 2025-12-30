@@ -173,6 +173,33 @@ func main() {
 					return lintYAML()
 				},
 			},
+			{
+				Name:  "merge",
+				Usage: "Merge a result file into legislators-district-offices.yaml",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "bioguide",
+						Usage:    "Bioguide ID to merge",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "target",
+						Usage:    "Path to legislators-district-offices.yaml",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:  "results",
+						Usage: "Path to results directory",
+						Value: "results",
+					},
+				},
+				Action: func(ctx *cli.Context) error {
+					bioguide := ctx.String("bioguide")
+					target := ctx.String("target")
+					resultsDir := ctx.String("results")
+					return runMerge(bioguide, target, resultsDir)
+				},
+			},
 		},
 	}
 
