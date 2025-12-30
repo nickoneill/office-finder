@@ -83,7 +83,7 @@ echo "$CHANGES" | jq -r '.changes[].bioguide' | while read -r BIOGUIDE; do
     if ! git diff --quiet legislators-district-offices.yaml; then
         git add legislators-district-offices.yaml
         git commit -m "Update district offices for $BIOGUIDE"
-        git push origin "$BRANCH_NAME"
+        git push --force origin "$BRANCH_NAME"
         gh pr create --repo "$FORK_REPO" \
             --head "$BRANCH_NAME" \
             --base main \
