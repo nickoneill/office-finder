@@ -44,6 +44,9 @@ fi
 
 cd congress-legislators
 
+# Configure git to use GH_TOKEN for push authentication
+git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${FORK_REPO}.git"
+
 # Sync with upstream
 git remote add upstream "https://github.com/$UPSTREAM_REPO.git" 2>/dev/null || true
 git fetch upstream
