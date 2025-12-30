@@ -1,20 +1,118 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"sort"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 )
 
-// runMerge merges a result file into the target legislators-district-offices.yaml
+// findEntryBounds finds the start and end byte positions of a legislator entry in raw YAML
+func findEntryBounds(data []byte, bioguide string) (start, end int, found bool) {
+	// Pattern to find entry starts: "- id:\n    bioguide: XXXXX"
+	pattern := regexp.MustCompile(`(?m)^- id:\n    bioguide: ([A-Z]\d+)`)
+	matches := pattern.FindAllSubmatchIndex(data, -1)
+
+	for i, match := range matches {
+		if len(match) >= 4 {
+			matchedBio := string(data[match[2]:match[3]])
+			if matchedBio == bioguide {
+				start = match[0]
+				if i+1 < len(matches) {
+					end = matches[i+1][0]
+				} else {
+					end = len(data)
+				}
+				return start, end, true
+			}
+		}
+	}
+	return 0, 0, false
+}
+
+// findInsertPosition finds where to insert a new entry alphabetically
+func findInsertPosition(data []byte, bioguide string) int {
+	pattern := regexp.MustCompile(`(?m)^- id:\n    bioguide: ([A-Z]\d+)`)
+	matches := pattern.FindAllSubmatchIndex(data, -1)
+
+	bioLower := strings.ToLower(bioguide)
+	for _, match := range matches {
+		if len(match) >= 4 {
+			matchedBio := string(data[match[2]:match[3]])
+			if strings.ToLower(matchedBio) > bioLower {
+				return match[0]
+			}
+		}
+	}
+	return len(data)
+}
+
+// formatEntry formats a single legislator entry to match upstream style
+func formatEntry(leg YAMLLegislatorOffices) []byte {
+	var buf bytes.Buffer
+
+	buf.WriteString("- id:\n")
+	buf.WriteString(fmt.Sprintf("    bioguide: %s\n", leg.ID.Bioguide))
+	buf.WriteString(fmt.Sprintf("    govtrack: %d\n", leg.ID.Govtrack))
+	if leg.ID.Thomas != "" {
+		buf.WriteString(fmt.Sprintf("    thomas: '%s'\n", leg.ID.Thomas))
+	}
+	buf.WriteString("  offices:\n")
+
+	for _, o := range leg.Offices {
+		buf.WriteString(fmt.Sprintf("  - id: %s\n", o.ID))
+		buf.WriteString(fmt.Sprintf("    address: %s\n", o.Address))
+		if o.Suite != "" {
+			if isNumericString(o.Suite) {
+				buf.WriteString(fmt.Sprintf("    suite: '%s'\n", o.Suite))
+			} else {
+				buf.WriteString(fmt.Sprintf("    suite: %s\n", o.Suite))
+			}
+		}
+		if o.Building != "" {
+			buf.WriteString(fmt.Sprintf("    building: %s\n", o.Building))
+		}
+		buf.WriteString(fmt.Sprintf("    city: %s\n", o.City))
+		buf.WriteString(fmt.Sprintf("    state: %s\n", o.State))
+		buf.WriteString(fmt.Sprintf("    zip: '%s'\n", o.Zip))
+		if o.Hours != "" {
+			buf.WriteString(fmt.Sprintf("    hours: %s\n", o.Hours))
+		}
+		if o.Latitude != 0 {
+			buf.WriteString(fmt.Sprintf("    latitude: %v\n", o.Latitude))
+		}
+		if o.Longitude != 0 {
+			buf.WriteString(fmt.Sprintf("    longitude: %v\n", o.Longitude))
+		}
+		if o.Fax != "" {
+			buf.WriteString(fmt.Sprintf("    fax: %s\n", o.Fax))
+		}
+		if o.Phone != "" {
+			buf.WriteString(fmt.Sprintf("    phone: %s\n", o.Phone))
+		}
+	}
+
+	return buf.Bytes()
+}
+
+func isNumericString(s string) bool {
+	for _, c := range s {
+		if c < '0' || c > '9' {
+			return false
+		}
+	}
+	return len(s) > 0
+}
+
+// runMerge surgically replaces only the target legislator's entry in the YAML file
 func runMerge(bioguide string, targetFile string, resultsDir string) error {
-	// Read the result file
+	// Read and parse the result file
 	resultPath := fmt.Sprintf("%s/%s.yaml", resultsDir, bioguide)
 	resultData, err := os.ReadFile(resultPath)
 	if err != nil {
@@ -32,60 +130,57 @@ func runMerge(bioguide string, targetFile string, resultsDir string) error {
 
 	result := resultLegislators[0]
 
-	// Read the target file
+	// Read target file as raw bytes
 	targetData, err := os.ReadFile(targetFile)
 	if err != nil {
 		return fmt.Errorf("failed to read target file %s: %w", targetFile, err)
 	}
 
+	// Also parse it to get structured data for field preservation
 	var legislators []YAMLLegislatorOffices
 	if err := yaml.Unmarshal(targetData, &legislators); err != nil {
 		return fmt.Errorf("failed to parse target file: %w", err)
 	}
 
-	// Find and replace, or add new entry
-	found := false
-	for i, leg := range legislators {
+	// Find existing entry to preserve fields
+	for _, leg := range legislators {
 		if leg.ID.Bioguide == bioguide {
-			// Preserve govtrack and thomas IDs from existing entry
 			result.ID.Govtrack = leg.ID.Govtrack
 			result.ID.Thomas = leg.ID.Thomas
-
-			// Preserve lat/lng and other fields from matching offices
 			preserveOfficeFields(leg.Offices, result.Offices)
-
-			legislators[i] = result
-			found = true
-			log.Printf("Updated existing entry for %s", bioguide)
 			break
 		}
 	}
 
+	// If new entry, fill IDs
+	start, end, found := findEntryBounds(targetData, bioguide)
 	if !found {
-		// Add new entry - need to fetch IDs from legislators-current.yaml
 		if err := fillMissingIDs(&result); err != nil {
 			log.Printf("Warning: could not fill IDs for %s: %v", bioguide, err)
 		}
-		legislators = append(legislators, result)
+	}
+
+	// Format the new entry
+	newEntry := formatEntry(result)
+
+	// Surgically replace or insert
+	var output []byte
+	if found {
+		output = make([]byte, 0, len(targetData)-end+start+len(newEntry))
+		output = append(output, targetData[:start]...)
+		output = append(output, newEntry...)
+		output = append(output, targetData[end:]...)
+		log.Printf("Updated entry for %s", bioguide)
+	} else {
+		insertPos := findInsertPosition(targetData, bioguide)
+		output = make([]byte, 0, len(targetData)+len(newEntry))
+		output = append(output, targetData[:insertPos]...)
+		output = append(output, newEntry...)
+		output = append(output, targetData[insertPos:]...)
 		log.Printf("Added new entry for %s", bioguide)
 	}
 
-	// Sort by bioguide
-	sort.Slice(legislators, func(i, j int) bool {
-		return strings.ToLower(legislators[i].ID.Bioguide) < strings.ToLower(legislators[j].ID.Bioguide)
-	})
-
-	// Marshal back to YAML
-	output, err := yaml.Marshal(legislators)
-	if err != nil {
-		return fmt.Errorf("failed to marshal YAML: %w", err)
-	}
-
-	// Convert double quotes to single quotes for consistency with upstream style
-	singleQuotedOutput := strings.ReplaceAll(string(output), `"`, `'`)
-
-	// Write back to target file
-	if err := os.WriteFile(targetFile, []byte(singleQuotedOutput), 0644); err != nil {
+	if err := os.WriteFile(targetFile, output, 0644); err != nil {
 		return fmt.Errorf("failed to write target file: %w", err)
 	}
 

@@ -257,3 +257,138 @@ func TestPreserveOfficeFields_EmptyExisting(t *testing.T) {
 		t.Errorf("Latitude should be 0: got %v", updated[0].Latitude)
 	}
 }
+
+func TestFindEntryBounds(t *testing.T) {
+	data := []byte(`- id:
+    bioguide: A000001
+    govtrack: 100001
+  offices:
+  - id: A000001-dc
+    address: 123 Main St.
+    city: Washington
+    state: DC
+    zip: '20001'
+- id:
+    bioguide: B000002
+    govtrack: 100002
+  offices:
+  - id: B000002-boston
+    address: 456 Oak Ave.
+    city: Boston
+    state: MA
+    zip: '02101'
+`)
+
+	// Find first entry
+	start, end, found := findEntryBounds(data, "A000001")
+	if !found {
+		t.Fatal("Should find A000001")
+	}
+	if start != 0 {
+		t.Errorf("A000001 start: got %d, want 0", start)
+	}
+
+	// Find second entry
+	start2, end2, found2 := findEntryBounds(data, "B000002")
+	if !found2 {
+		t.Fatal("Should find B000002")
+	}
+	if start2 != end {
+		t.Errorf("B000002 should start where A000001 ends: got %d, want %d", start2, end)
+	}
+	if end2 != len(data) {
+		t.Errorf("B000002 end should be EOF: got %d, want %d", end2, len(data))
+	}
+
+	// Not found
+	_, _, found3 := findEntryBounds(data, "Z999999")
+	if found3 {
+		t.Error("Should not find Z999999")
+	}
+}
+
+func TestFindInsertPosition(t *testing.T) {
+	data := []byte(`- id:
+    bioguide: A000001
+    govtrack: 100001
+  offices:
+  - id: test
+- id:
+    bioguide: C000003
+    govtrack: 100003
+  offices:
+  - id: test
+`)
+
+	// Insert between A and C
+	pos := findInsertPosition(data, "B000002")
+	_, endA, _ := findEntryBounds(data, "A000001")
+	if pos != endA {
+		t.Errorf("B000002 should insert after A000001: got %d, want %d", pos, endA)
+	}
+
+	// Insert at end
+	pos2 := findInsertPosition(data, "Z999999")
+	if pos2 != len(data) {
+		t.Errorf("Z999999 should insert at end: got %d, want %d", pos2, len(data))
+	}
+
+	// Insert at start
+	pos3 := findInsertPosition(data, "A000000")
+	if pos3 != 0 {
+		t.Errorf("A000000 should insert at start: got %d, want 0", pos3)
+	}
+}
+
+func TestFormatEntry(t *testing.T) {
+	leg := YAMLLegislatorOffices{
+		ID: struct {
+			Bioguide string `yaml:"bioguide"`
+			Govtrack int    `yaml:"govtrack"`
+			Thomas   string `yaml:"thomas,omitempty"`
+		}{
+			Bioguide: "A000001",
+			Govtrack: 100001,
+			Thomas:   "01234",
+		},
+		Offices: []YAMLOffice{
+			{
+				ID:      "A000001-dc",
+				Address: "123 Main St.",
+				Suite:   "100",
+				City:    "Washington",
+				State:   "DC",
+				Zip:     "20001",
+				Phone:   "202-555-0000",
+			},
+		},
+	}
+
+	result := string(formatEntry(leg))
+
+	// Check structure
+	if !stringContains(result, "- id:\n") {
+		t.Error("Should start with '- id:'")
+	}
+	if !stringContains(result, "    bioguide: A000001\n") {
+		t.Error("Should have bioguide")
+	}
+	if !stringContains(result, "    thomas: '01234'\n") {
+		t.Error("Thomas should be quoted")
+	}
+	if !stringContains(result, "    suite: '100'\n") {
+		t.Error("Numeric suite should be quoted")
+	}
+	if !stringContains(result, "    zip: '20001'\n") {
+		t.Error("Zip should be quoted")
+	}
+}
+
+func stringContains(s, substr string) bool {
+	for i := 0; i <= len(s)-len(substr); i++ {
+		if s[i:i+len(substr)] == substr {
+			return true
+		}
+	}
+	return false
+}
