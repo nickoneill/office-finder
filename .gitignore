@@ -2,3 +2,18 @@
 .DS_Store
 legislators-district-offices.yaml
 updated_legislators-district-offices.yaml
+
+# Cache and results directories
+cache/
+results/
+changes.json
+
+# Keep directory structure
+!cache/.gitkeep
+!results/.gitkeep
+
+# Build artifacts
+office-finder
+
+# Cloned repos for PR creation
+congress-legislators/

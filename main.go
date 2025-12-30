@@ -7,9 +7,12 @@ import (
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/sashabaranov/go-openai"
 	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v2"
 )
+
+// anthropicAPIKey is loaded from environment
+var anthropicAPIKey string
 
 type OfficeList struct {
 	Bioguide string       `json:"bioguide"`
@@ -28,26 +31,63 @@ type OfficeInfo struct {
 	Fax      string `json:"fax,omitempty"`
 }
 
-var openaiClient *openai.Client
+// NavigateResult is the JSON output of the navigate command
+type NavigateResult struct {
+	ContactURL string `json:"contact_url"`
+}
 
 func main() {
-	openaiToken := os.Getenv("OPENAI_API_KEY")
-	if openaiToken == "" {
-		log.Fatal("no OpenAI token found")
-	}
-	openaiClient = openai.NewClient(openaiToken)
+	anthropicAPIKey = os.Getenv("ANTHROPIC_API_KEY")
 
 	app := &cli.App{
 		Name:  "office-finder",
-		Usage: "A tool to scrape and process representative office addresses and phone numbers",
+		Usage: "A tool to find and extract representative office addresses using Claude AI",
 		Commands: []*cli.Command{
 			{
-				Name:  "scrape",
-				Usage: "Scrape office addresses from public representative websites",
+				Name:      "navigate",
+				Usage:     "Find the contact/offices page URL for a representative website",
+				ArgsUsage: "<url>",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:  "debug",
+						Usage: "Enable debug mode",
+						Value: false,
+					},
+				},
+				Action: func(ctx *cli.Context) error {
+					if anthropicAPIKey == "" {
+						return fmt.Errorf("ANTHROPIC_API_KEY environment variable is required")
+					}
+					if ctx.NArg() < 1 {
+						return fmt.Errorf("url argument is required")
+					}
+					url := ctx.Args().First()
+					debug := ctx.Bool("debug")
+
+					contactURL, err := NavigateToContact(url, debug)
+					if err != nil {
+						return err
+					}
+
+					result := NavigateResult{ContactURL: contactURL}
+					output, _ := json.Marshal(result)
+					fmt.Println(string(output))
+					return nil
+				},
+			},
+			{
+				Name:  "extract",
+				Usage: "Extract office information from a specific page",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
-						Name:  "url",
-						Usage: "URL to scrape (optional, if not provided all URLs will be scraped)",
+						Name:     "url",
+						Usage:    "URL of the page containing office addresses",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "bioguide",
+						Usage:    "Bioguide ID of the legislator",
+						Required: true,
 					},
 					&cli.BoolFlag{
 						Name:  "debug",
@@ -56,26 +96,74 @@ func main() {
 					},
 				},
 				Action: func(ctx *cli.Context) error {
-					url := ctx.String("url")
-					debug := ctx.Bool("debug")
-					if url == "" {
-						return scrapeAllURLs()
+					if anthropicAPIKey == "" {
+						return fmt.Errorf("ANTHROPIC_API_KEY environment variable is required")
 					}
-					return scrapeOne(url, debug)
+					url := ctx.String("url")
+					bioguide := ctx.String("bioguide")
+					debug := ctx.Bool("debug")
+
+					offices, err := ExtractOffices(url, bioguide, debug)
+					if err != nil {
+						return err
+					}
+
+					// Output as YAML in district-offices format
+					output := YAMLLegislatorOffices{
+						Offices: offices,
+					}
+					output.ID.Bioguide = bioguide
+
+					yamlOutput, err := yaml.Marshal([]YAMLLegislatorOffices{output})
+					if err != nil {
+						return err
+					}
+					fmt.Println(string(yamlOutput))
+					return nil
 				},
 			},
 			{
-				Name:  "validate",
-				Usage: "Validate legislators in offices.json against the YAML file",
+				Name:  "batch",
+				Usage: "Process all legislators in batch mode",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "state",
+						Usage: "Filter by state (e.g., CA, TX)",
+					},
+					&cli.StringFlag{
+						Name:  "bioguide",
+						Usage: "Process only a specific bioguide ID",
+					},
+					&cli.BoolFlag{
+						Name:  "debug",
+						Usage: "Enable debug mode",
+						Value: false,
+					},
+				},
 				Action: func(ctx *cli.Context) error {
-					return validateLegislators()
+					if anthropicAPIKey == "" {
+						return fmt.Errorf("ANTHROPIC_API_KEY environment variable is required")
+					}
+					state := ctx.String("state")
+					bioguide := ctx.String("bioguide")
+					debug := ctx.Bool("debug")
+					return runBatch(state, bioguide, debug)
 				},
 			},
 			{
-				Name:  "upstreamChanges",
-				Usage: "Update the YAML file with office information from offices.json",
+				Name:  "compare",
+				Usage: "Compare results with upstream district-offices.yaml",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:    "verbose",
+						Aliases: []string{"v"},
+						Usage:   "Show detailed changes for each legislator",
+						Value:   false,
+					},
+				},
 				Action: func(ctx *cli.Context) error {
-					return upstreamChanges()
+					verbose := ctx.Bool("verbose")
+					return runCompare(verbose)
 				},
 			},
 			{
@@ -92,38 +180,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func validateLegislators() error {
-	repURLs := listRepURLs()
-
-	// Read offices.json
-	officesData, err := os.ReadFile("offices.json")
-	if err != nil {
-		return fmt.Errorf("error reading offices.json: %v", err)
-	}
-
-	var officeList []OfficeList
-	err = json.Unmarshal(officesData, &officeList)
-	if err != nil {
-		return fmt.Errorf("error parsing offices.json: %v", err)
-	}
-
-	existingOffices := map[string]bool{}
-	for _, office := range officeList {
-		if len(office.Offices) > 0 {
-			existingOffices[office.URL] = true
-		}
-	}
-
-	for _, repURL := range repURLs {
-		if !existingOffices[repURL] {
-			log.Printf("didn't find offices for %s", repURL)
-		}
-	}
-
-	// TODO: ensure offices listed are in the state they're supposed to be
-	// TODO: ensure states are two letter abbreviations
-
-	return nil
 }

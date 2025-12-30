@@ -1,0 +1,86 @@
+name: Update District Offices
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:      # Manual trigger
+    inputs:
+      state:
+        description: 'Filter by state (e.g., CA, TX)'
+        required: false
+        type: string
+      bioguide:
+        description: 'Process only a specific bioguide ID'
+        required: false
+        type: string
+
+jobs:
+  update-offices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: cache/
+          key: contact-urls-${{ github.run_id }}
+          restore-keys: contact-urls-
+
+      - name: Build
+        run: go build -o office-finder .
+
+      - name: Run batch processor
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.state }}" ]; then
+            ARGS="$ARGS --state ${{ github.event.inputs.state }}"
+          fi
+          if [ -n "${{ github.event.inputs.bioguide }}" ]; then
+            ARGS="$ARGS --bioguide ${{ github.event.inputs.bioguide }}"
+          fi
+          ./office-finder batch $ARGS
+
+      - name: Compare results
+        run: ./office-finder compare
+
+      - name: Install dependencies for PR script
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Create PRs
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: ./scripts/create-prs.sh
+
+      - name: Save cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: cache/
+          key: contact-urls-${{ github.run_id }}
+
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: |
+            results/
+            changes.json
+          retention-days: 30
+
+      - name: Upload cache as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cache
+          path: cache/
+          retention-days: 90
