@@ -1,8 +1,8 @@
 name: Update District Offices
 
 on:
-  schedule:
-    - cron: '0 6 * * 2'  # Weekly on Tuesday at 6 AM UTC
+  # schedule:
+  #   - cron: '0 6 * * 2'  # Weekly on Tuesday at 6 AM UTC
   workflow_dispatch:      # Manual trigger
     inputs:
       state:
